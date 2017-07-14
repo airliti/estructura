@@ -1,0 +1,33 @@
+{
+  "name": "estructura",
+  "version": "0.1.6",
+  "license": "MIT",
+  "description": "JavaScript Data Structures written for Node.js",
+  "keywords": [
+    "deque",
+    "doubly linked list",
+    "heap",
+    "lru cache",
+    "queue",
+    "stable heap"
+  ],
+  "main": "export.js",
+  "scripts": {
+    "test": "mocha --recursive test",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -dir ./istanbul -- --recursive test"
+  },
+  "author": "Airliti",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0"
+  },
+  "homepage": "https://github.com/airliti/estructura",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/airliti/estructura.git"
+  },
+  "bugs": {
+    "url": "https://github.com/airliti/estructura/issues"
+  }
+}

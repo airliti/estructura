@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - "7"
+  - "6"
+
+install:
+  - npm install
+  - grunt build
+  - cd package
+  - npm install
+  - cd ..
+
+script:
+  - cd package
+  - npm test

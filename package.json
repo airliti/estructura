@@ -1,0 +1,15 @@
+{
+  "name": "estructura-build",
+  "private": true,
+  "scripts": {
+    "build": "grunt build"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-plugin-transform-async-to-generator": "^6.22.0",
+    "grunt": "^1.0.1",
+    "grunt-babel": "^6.0.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0"
+  }
+}
