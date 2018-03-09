@@ -1,3 +1,7 @@
+2018-03-09 Airliti
+
+    * Updated travis.yml
+
 2017-07-14 Airliti
 
     * #.sizeCalculator for the Lru Cache
