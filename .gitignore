@@ -1,5 +1,6 @@
 .idea
 package
+package-lock.json
 istanbul
 npm-debug.log
 node_modules

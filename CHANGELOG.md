@@ -1,6 +1,7 @@
 2018-03-09 Airliti
 
-    * Updated travis.yml
+    * Updated travis.yml to include newer Node.js versions and .gitignore to exclude
+      package-lock.json
 
 2017-07-14 Airliti
 
