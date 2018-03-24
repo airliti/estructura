@@ -16,9 +16,10 @@ moduleMapping.CircularBuffer = require('./lib/CircularBuffer')
 moduleMapping.Deque = require('./lib/Deque')
 
 /**
- * @type {DoubleLinkedList}
+ * @type {DoublyLinkedList}
  */
-moduleMapping.DoubleLinkedList = require('./lib/DoubleLinkedList')
+moduleMapping.DoubleLinkedList = require('./lib/DoublyLinkedList')
+moduleMapping.DoublyLinkedList = require('./lib/DoublyLinkedList')
 
 /**
  * @type {Heap}
@@ -37,6 +38,11 @@ moduleMapping.LruCache = require('./lib/LruCache')
  * @type {Queue}
  */
 moduleMapping.Queue = require('./lib/Queue')
+
+/**
+ * @type {SingleLinkedList}
+ */
+moduleMapping.SingleLinkedList = require('./lib/SingleLinkedList')
 
 /**
  * @type {StableHeap}

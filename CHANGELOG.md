@@ -1,39 +1,48 @@
-2018-03-09 Airliti
+2018-03-24 airliti
+
+    * #.constructor testing for the Circular Buffer
+
+    * Implementation of a Single Linked List
+
+    * Renamd Double Linked List to Doubly Linked List, but using `require('estructura/double-linked-list')`
+      will continue to work ( for the moment )
+
+2018-03-09 airliti
 
     * Updated travis.yml to include newer Node.js versions and .gitignore to exclude
       package-lock.json
 
-2017-07-14 Airliti
+2017-07-14 airliti
 
     * #.sizeCalculator for the Lru Cache
 
-2017-05-15 0.1.6 Airliti
+2017-05-15 0.1.6 airliti
 
     * Version 0.1.6 released on Npm
 
     * Adding a Circular Buffer
 
-2017-04-21 Airliti
+2017-04-21 airliti
 
     * Verifying #.hasHitCount, #.hasMissCount, #.getHitCount and #.getMissCount
       used by the Recorder for the Lru Cache
 
-2017-04-19 Airliti
+2017-04-19 airliti
 
     * Documentation for the Recorder attached to the Lru Cache
 
-2017-04-16 Airliti
+2017-04-16 airliti
 
     * Added the documentation for the Deque, Double Linked List, Heap, Lru Cache,
       Queue and Stable Heap immediatly to the `src`
 
-2017-04-04 Airliti
+2017-04-04 airliti
 
     * Transpiling with Babel
 
     * #.getOrCreate and #.getOrCreateSync for the Lru Cache
 
-2017-04-03 Airliti
+2017-04-03 airliti
 
     * Verification of the #.peek method used by the Double Linked List was pointing
       to the #.peekBack method
@@ -45,7 +54,7 @@
     
     * Basic implementation of a Recorder for the Lru Cache
 
-2017-04-02 0.1.4 Airliti
+2017-04-02 0.1.4 airliti
 
     * Released version 0.1.4 on Npm
     
@@ -57,20 +66,20 @@
     * When the #.maxAge value is modified, the Lru Cache will activate the #.prune
       method to dispose old data
 
-2017-04-02 0.1.3 Airliti
+2017-04-02 0.1.3 airliti
 
     * Released version 0.1.3 on Npm
 
     * Updated the Lru Cache
 
-2017-04-02 0.1.2 Airliti
+2017-04-02 0.1.2 airliti
 
     * The #.size value used by the Lru Cache wasn't updated when the #.get method 
       discarded an item because it surpassed the `maxAge` value
 
     * Added a #.prune method to the Lru Cache
 
-2017-04-01 0.1.1 Airliti
+2017-04-01 0.1.1 airliti
 
     * Version 0.1.1 on Npm
 
@@ -78,21 +87,21 @@
     
     * Further enhanced the Lru Cache with a #.has and #.delete method
 
-2017-03-31 Airliti
+2017-03-31 airliti
 
     * Removed the #.concat from the Deque, Heap and Double Linked List
 
     * A basic implementation of a Least Recently Used Cache
 
-2017-03-30 Airliti
+2017-03-30 airliti
 
     * Added the MIT License for the Project in LICENSE.md and package.json
 
-2017-03-29 Airliti
+2017-03-29 airliti
 
     * #.peek and #.peekBack for the Deque and Double Linked List
 
-2017-03-27 0.1.0 Airliti
+2017-03-27 0.1.0 airliti
 
     * Version 0.1.0 released on Npm
 

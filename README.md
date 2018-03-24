@@ -12,13 +12,19 @@ Data Structures written in JavaScript for Node.js
 
 * [Deque](https://github.com/airliti/estructura/wiki/Deque)
 
-* [Double Linked List](https://github.com/airliti/estructura/wiki/Double-Linked-List)
+* [Double Linked List](https://github.com/airliti/estructura/wiki/Doubly-Linked-List)
+
+Note: the Double Linked List should NOT be used anymore. Use the Doubly Linked List instead.
+
+* [Doubly Linked List](https://github.com/airliti/estructura/wiki/Doubly-Linked-List)
 
 * [Heap](https://github.com/airliti/estructura/wiki/Heap)
 
 * [Lru Cache](https://github.com/airliti/estructura/wiki/Lru-Cache)
 
 * [Queue](https://github.com/airliti/estructura/wiki/Queue)
+
+* [Single Linked List](https://github.com/airliti/estructura/wiki/Single-Linked-List)
 
 * [Stable Heap](https://github.com/airliti/estructura/wiki/Stable-Heap)
 

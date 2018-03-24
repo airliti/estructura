@@ -3,6 +3,14 @@ const should = require('chai').should()
 const CircularBuffer = require('./../circular-buffer')
 
 describe('Circular Buffer', () => {
+    context('#.constructor', () => {
+        it('Should throw an Error if the `maxSize` isNaN.', () => {
+            (function() {
+                new CircularBuffer("isNaN")
+            }).should.throw(Error, /isNaN is NaN/)
+        })
+    })
+
     context('#.push', () => {
         it('Should append an item to the Circular Buffer.', () => {
             const circularBuffer = new CircularBuffer(4)

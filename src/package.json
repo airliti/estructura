@@ -9,6 +9,7 @@
     "heap",
     "lru cache",
     "queue",
+    "single linked list",
     "stable heap"
   ],
   "main": "export.js",
@@ -29,5 +30,8 @@
   },
   "bugs": {
     "url": "https://github.com/airliti/estructura/issues"
+  },
+  "dependencies": {
+    "npm": "^5.8.0"
   }
 }
