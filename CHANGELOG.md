@@ -1,5 +1,7 @@
 2018-03-24 airliti
 
+    * #.peekFront as an alias for #.peek
+
     * #.constructor testing for the Circular Buffer
 
     * Implementation of a Single Linked List
