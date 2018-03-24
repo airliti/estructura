@@ -79,6 +79,14 @@ describe('Heap', () => {
         })
     })
 
+    context('#.peekFront', () => {
+        it('Should be an alias of #.peek.', () => {
+            const aHeap = new Heap()
+
+            aHeap.peekFront.should.equal(aHeap.peek)
+        })
+    })
+
     context('#.toArray', () => {
         it('Should be possible to turn a Heap into an Array.', () => {
             const itemCollection = Heap.MinHeap.from(['A', 'C', 'D', 'B']).toArray()

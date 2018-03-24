@@ -103,21 +103,10 @@ describe('DoublyLinkedList', () => {
     })
 
     context('#.peekFront', () => {
-        it('Should return the item at the front of the Doubly Linked List.', () => {
+        it('Should be an alias of #.peek.', () => {
             const doublyLinkedList = new DoublyLinkedList()
 
-            doublyLinkedList.push('B')
-            doublyLinkedList.unshift('A')
-
-            doublyLinkedList.peekFront().should.equal(
-                doublyLinkedList.shift()
-            )
-        })
-
-        it('Should return "undefined" when the Doubly Linked List is empty.', () => {
-            const doublyLinkedList = new DoublyLinkedList()
-
-            should.not.exist(doublyLinkedList.peekFront())
+            doublyLinkedList.peekFront.should.equal(doublyLinkedList.peek)
         })
     })
 

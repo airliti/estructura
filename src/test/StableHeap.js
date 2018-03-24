@@ -44,4 +44,12 @@ describe('StableHeap', () => {
         toArray[2].aValue.should.equal('D')
         toArray[3].aValue.should.equal('B')
     })
+
+    context('#.peekFront', () => {
+        it('Should be an alias of #.peek.', () => {
+            const stableHeap = new StableHeap()
+
+            stableHeap.peekFront.should.equal(stableHeap.peek)
+        })
+    })
 })

@@ -127,6 +127,14 @@ describe('Deque', () => {
         })
     })
 
+    context('#.peekFront', () => {
+        it('Should be an alias of #.peek.', () => {
+            const aDeque = new Deque()
+
+            aDeque.peekFront.should.equal(aDeque.peek)
+        })
+    })
+
     context('#.peekBack', () => {
         it('Should return the item at the back of the Deque.', () => {
             const aDeque = new Deque()

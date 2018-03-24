@@ -32,6 +32,13 @@ class Queue {
          * @type {Number}
          */
         this.size = 0
+
+        /**
+         * @see #.peek
+         *
+         * @type {Function}
+         */
+        this.peekFront = this.peek
     }
 
     /**
@@ -71,6 +78,8 @@ class Queue {
      *
      * aQueue.peek()
      * >>> John Doe
+     *
+     * @alias peekFront
      */
     peek() {
         return this._itemCollection[this._itemOffset]

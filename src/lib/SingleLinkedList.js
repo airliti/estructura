@@ -23,6 +23,8 @@ class SingleLinkedList {
         }
 
         this.size = 0
+
+        this.peekFront = this.peek
     }
 
     /**
@@ -93,10 +95,12 @@ class SingleLinkedList {
      * singleLinkedList.unshift('John Doe')
      * singleLinkedList.unshift('Jane Doe')
      *
-     * singleLinkedList.peekFront()
+     * singleLinkedList.peek()
      * >>> Jane Doe
+     *
+     * @alias peekFront
      */
-    peekFront() {
+    peek() {
         if (this.pHead_.aValue instanceof NilSaVj9xHc) return undefined
 
         return this.pHead_.aValue

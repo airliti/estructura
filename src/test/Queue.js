@@ -54,6 +54,14 @@ describe('Queue', () => {
         })
     })
 
+    context('#.peekFront', () => {
+        it('Should be an alias of #.peek.', () => {
+            const aQueue = new Queue()
+
+            aQueue.peekFront.should.equal(aQueue.peek)
+        })
+    })
+
     context('#.toArray', () => {
         it('Should return an Array with each item from the Queue.', () => {
             const aQueue = Queue.from(['A', 'B', 'C', 'D'])

@@ -39,6 +39,13 @@ class CircularBuffer {
          * @type {Number}
          */
         this.maxSize = maxSize
+
+        /**
+         * @see #.peek
+         *
+         * @type {Function}
+         */
+        this.peekFront = this.peek
     }
 
     /**
@@ -184,6 +191,8 @@ class CircularBuffer {
      *
      * circularBuffer.peek()
      * >>> Hello Jane Doe!
+     *
+     * @alias peekFront
      */
     peek() {
         if (this.size === 0) return undefined

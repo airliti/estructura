@@ -51,6 +51,13 @@ class Heap {
          * @type {Number}
          */
         this.size = 0
+
+        /**
+         * @see #.peek
+         *
+         * @type {Function}
+         */
+        this.peekFront = this.peek
     }
 
     /**
@@ -169,6 +176,8 @@ class Heap {
      *
      * aHeap.peek()
      * >>> 2
+     *
+     * @alias peekFront
      */
     peek() {
         return this._itemCollection[0]

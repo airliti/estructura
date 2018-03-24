@@ -82,6 +82,8 @@ class StableHeap extends Heap {
          * @type {Number}
          */
         this._insertNr = Number.MAX_SAFE_INTEGER
+
+        this.peekFront = this.peek
     }
 
     /**
@@ -102,6 +104,8 @@ class StableHeap extends Heap {
      * `O(1)`
      *
      * @return {*}
+     *
+     * @alias peekFront
      */
     peek() {
         return super.peek().aValue

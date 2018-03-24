@@ -48,6 +48,13 @@ class Deque {
          * @type {Number}
          */
         this.size = 0
+
+        /**
+         * @see #.peek
+         *
+         * @type {Function}
+         */
+        this.peekFront = this.peek
     }
 
     /**
@@ -346,6 +353,8 @@ class Deque {
      *
      * aDeque.peek()
      * >>> Hello John Doe!
+     *
+     * @alias peekFront
      */
     peek() {
         if (this._fCollection.length > this._fOffset) {

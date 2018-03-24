@@ -35,6 +35,13 @@ class DoublyLinkedList {
         this.pTail_.lNode = this.pHead_
 
         this.size = 0
+
+        /**
+         * @see #.peek
+         *
+         * @type {Function}
+         */
+        this.peekFront = this.peek
     }
 
     /**
@@ -183,10 +190,6 @@ class DoublyLinkedList {
         return !(this.pHead_.rNode.aValue instanceof NilPnQgTl5o) ? this.pHead_.rNode.aValue : undefined
     }
 
-    peekFront() {
-        return !(this.pHead_.rNode.aValue instanceof NilPnQgTl5o) ? this.pHead_.rNode.aValue : undefined
-    }
-
     /**
      * Take a peek at the last item within the Doubly Linked List.
      *
@@ -206,7 +209,7 @@ class DoublyLinkedList {
      * @example
      *
      * <caption>
-     * The `#.peekBack` method becomes an alias for the `#.peekFront` method when only 1
+     * The `#.peekBack` method becomes an alias for the `#.peek` method when only 1
      * item is present within the Doubly Linked List.
      * </caption>
      *

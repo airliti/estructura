@@ -5,7 +5,7 @@ const CircularBuffer = require('./../circular-buffer')
 describe('Circular Buffer', () => {
     context('#.constructor', () => {
         it('Should throw an Error if the `maxSize` isNaN.', () => {
-            (function() {
+            (function () {
                 new CircularBuffer("isNaN")
             }).should.throw(Error, /isNaN is NaN/)
         })
@@ -117,6 +117,14 @@ describe('Circular Buffer', () => {
             const circularBuffer = new CircularBuffer(4)
 
             should.not.exist(circularBuffer.peek())
+        })
+    })
+
+    context('#.peekFront', () => {
+        it('Should be an alias for #.peek.', () => {
+            const circularBuffer = new CircularBuffer(4)
+
+            circularBuffer.peekFront.should.equal(circularBuffer.peek)
         })
     })
 

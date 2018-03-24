@@ -42,14 +42,14 @@ describe('SingleLinkedList', () => {
         })
     })
 
-    context('#.peekFront', () => {
+    context('#.peek', () => {
         it('Should return the item at the front of the Single Linked List.', () => {
             const singleLinkedList = new SingleLinkedList()
 
             singleLinkedList.unshift('A')
             singleLinkedList.unshift('B')
 
-            singleLinkedList.peekFront().should.equal(
+            singleLinkedList.peek().should.equal(
                 singleLinkedList.shift() // "A" should still be available.
             )
         })
@@ -57,7 +57,15 @@ describe('SingleLinkedList', () => {
         it('Should return "undefined" when the Single Linked List is empty.', () => {
             const singleLinkedList = new SingleLinkedList()
 
-            should.not.exist(singleLinkedList.peekFront())
+            should.not.exist(singleLinkedList.peek())
+        })
+    })
+
+    context('#.peekFront', () => {
+        it('Should be an alias of #.peek.', () => {
+            const singleLinkedList = new SingleLinkedList()
+
+            singleLinkedList.peekFront.should.equal(singleLinkedList.peek)
         })
     })
 
