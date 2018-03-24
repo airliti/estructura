@@ -7,7 +7,7 @@ class LruCache {
     /**
      * @constructor
      *
-     * @param {{maxSize: Number, maxAge: Number}}
+     * @param {{maxSize: Number, maxAge: Number}} cacheConfig
      *
      * @example
      *
@@ -52,8 +52,8 @@ class LruCache {
          * @default function() { return 1 }
          */
         this.sizeCalculator = cacheConfig.sizeCalculator || function () {
-                return 1
-            }
+            return 1
+        }
 
         /**
          * The maximum age of an item in the Cache, defined in Milliseconds.
@@ -110,7 +110,7 @@ class LruCache {
     /**
      * @private
      *
-     * @param {{uniqueId: (String | Function | Object), lNode: *, rNode: *, createdOrUpdatedAt: Number, aValue: *}}
+     * @param {{uniqueId: (String | Function | Object), lNode: *, rNode: *, createdOrUpdatedAt: Number, aValue: *}} aNode
      */
     _unshiftNode(aNode) {
         if (aNode === this._headNode) return
@@ -729,17 +729,12 @@ class Recorder extends LruCache {
         hitOrMiss > 0 ? this[hitName]++ : this[missName]++
 
         //
-        // @type {Number}
-        //
-        const hitMissRatio = this[hitName] / (this[hitName] + this[missName])
-
-        //
         // Update the "getHitMissRatio" with the newly calculated Hit and Miss
         // Ratio.
         //
         // @type {Number}
         //
-        this[functionName + 'HitMissRatio'] = hitMissRatio
+        this[functionName + 'HitMissRatio'] = this[hitName] / (this[hitName] + this[missName])
     }
 
     /**
