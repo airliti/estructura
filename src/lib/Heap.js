@@ -32,7 +32,7 @@ class Heap {
      *     }
      * )
      */
-    constructor(compareFunction = Comparator.defaultComparator) {
+    constructor(compareFunction = Comparator.compareFnAscending) {
         /**
          * @private
          *
@@ -286,7 +286,7 @@ class Heap {
      *     }
      * )
      */
-    static from(iterateOver, compareFunction = Comparator.defaultComparator) {
+    static from(iterateOver, compareFunction = Comparator.compareFnAscending) {
         const aHeap = new Heap(compareFunction)
 
         for (const pushItem of iterateOver) aHeap.push(pushItem)
@@ -363,7 +363,7 @@ class MinHeap extends Heap {
      *
      * const minHeap = new MinHeap()
      */
-    constructor(compareFunction = Comparator.defaultComparator) {
+    constructor(compareFunction = Comparator.compareFnAscending) {
         super(compareFunction)
     }
 
@@ -377,7 +377,7 @@ class MinHeap extends Heap {
      *
      * const minHeap = MinHeap.from(['A', 'C', 'B', 'D'])
      */
-    static from(iterateOver, compareFunction = Comparator.defaultComparator) {
+    static from(iterateOver, compareFunction = Comparator.compareFnAscending) {
         return Heap.from(iterateOver, compareFunction)
     }
 }
@@ -397,7 +397,7 @@ class MaxHeap extends Heap {
      *
      * const maxHeap = new MaxHeap()
      */
-    constructor(compareFunction = Comparator.negatedComparator) {
+    constructor(compareFunction = Comparator.compareFnDescending) {
         super(compareFunction)
     }
 
@@ -411,7 +411,7 @@ class MaxHeap extends Heap {
      *
      * const maxHeap = MaxHeap.from(['A', 'C', 'B', 'D'])
      */
-    static from(iterateOver, compareFunction = Comparator.negatedComparator) {
+    static from(iterateOver, compareFunction = Comparator.compareFnDescending) {
         return Heap.from(iterateOver, compareFunction)
     }
 }

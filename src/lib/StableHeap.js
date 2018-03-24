@@ -71,7 +71,7 @@ class StableHeap extends Heap {
      *
      * const stableMaxHeap = new StableMaxHeap()
      */
-    constructor(compareFunction = Comparator.defaultComparator) {
+    constructor(compareFunction = Comparator.compareFnAscending) {
         super(
             wrapComparator(compareFunction)
         )
@@ -127,7 +127,7 @@ class StableHeap extends Heap {
      *
      * @return {Heap}
      */
-    static from(iterateOver, compareFunction = Comparator.defaultComparator) {
+    static from(iterateOver, compareFunction = Comparator.compareFnAscending) {
         const aHeap = new StableHeap(compareFunction)
 
         for (const pushItem of iterateOver) aHeap.push(pushItem)
@@ -152,7 +152,7 @@ class StableMaxHeap extends StableHeap {
      *
      * @param {Function} compareFunction
      */
-    constructor(compareFunction = Comparator.negatedComparator) {
+    constructor(compareFunction = Comparator.compareFnDescending) {
         super(compareFunction)
     }
 
@@ -162,7 +162,7 @@ class StableMaxHeap extends StableHeap {
      *
      * @return {Heap}
      */
-    static from(iterateOver, compareFunction = Comparator.negatedComparator) {
+    static from(iterateOver, compareFunction = Comparator.compareFnDescending) {
         return StableHeap.from(iterateOver, compareFunction)
     }
 }

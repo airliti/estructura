@@ -1,12 +1,12 @@
 /**
- * A default comparison `Function`. Sort each item in an ascending manner.
+ * Ascending.
  *
  * @param {*} itemA
  * @param {*} itemB
  *
  * @return {Number}
  */
-const defaultComparator = (itemA, itemB) => {
+const compareFnAscending = (itemA, itemB) => {
     if (itemA > itemB) return +1
     if (itemA < itemB) return -1
 
@@ -14,16 +14,20 @@ const defaultComparator = (itemA, itemB) => {
 }
 
 /**
- * Negate the result from the default comparison `Function`. Used to sort in a
- * descending fashion.
+ * Descending.
  *
  * @param {*} itemA
  * @param {*} itemB
  *
  * @return {Number}
  */
-const negatedComparator = (itemA, itemB) => -defaultComparator(itemA, itemB)
+const compareFnDescending = (itemA, itemB) => {
+    if (itemA > itemB) return -1
+    if (itemA < itemB) return +1
+
+    return 0
+}
 
 module.exports = {
-    defaultComparator: defaultComparator, negatedComparator: negatedComparator
+    compareFnAscending: compareFnAscending, compareFnDescending: compareFnDescending
 }
