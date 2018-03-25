@@ -1,3 +1,9 @@
+2018-03-25 airliti
+
+    * Convention
+    
+    * Simpler implementation for the Lru Cache ( namely, the internal Doubly Linked List )
+
 2018-03-24 airliti
 
     * #.peekFront as an alias for #.peek

@@ -4,11 +4,11 @@ const Comparator = require('./util/Comparator')
  * Used to wrap any given Function to the Stable Heap in order to ensure a First
  * In First Out mechanism between each and every item that is equal.
  *
- * @param {Function} compareFunction
+ * @param {Function} compareFn
  *
  * @return {Function}
  */
-const wrapComparator = (compareFunction) => {
+const wrapComparator = (compareFn) => {
     /**
      * @private
      *
@@ -18,7 +18,7 @@ const wrapComparator = (compareFunction) => {
      * @return {Boolean}
      */
     return (itemA, itemB) => {
-        const comparisonOutput = compareFunction(itemA.aValue, itemB.aValue)
+        const comparisonOutput = compareFn(itemA.aValue, itemB.aValue)
 
         return comparisonOutput !== 0 ? comparisonOutput : itemA.insertNr < itemB.insertNr ? +1 : -1
     }
@@ -36,7 +36,7 @@ class StableHeap extends Heap {
     /**
      * @constructor
      *
-     * @param {Function} compareFunction
+     * @param {Function} compareFn
      *
      * @example
      *
@@ -71,9 +71,9 @@ class StableHeap extends Heap {
      *
      * const stableMaxHeap = new StableMaxHeap()
      */
-    constructor(compareFunction = Comparator.compareFnAscending) {
+    constructor(compareFn = Comparator.compareFnAscending) {
         super(
-            wrapComparator(compareFunction)
+            wrapComparator(compareFn)
         )
 
         /**
@@ -91,10 +91,10 @@ class StableHeap extends Heap {
      *
      * `O(log n)`
      *
-     * @param {*} pushItem
+     * @param {*} aValue
      */
-    push(pushItem) {
-        return super.push({aValue: pushItem, insertNr: this._insertNr--})
+    push(aValue) {
+        return super.push({aValue: aValue, insertNr: this._insertNr--})
     }
 
     /**
@@ -127,12 +127,12 @@ class StableHeap extends Heap {
      * Create a Heap by giving Iterable.
      *
      * @param {Iterable} iterateOver
-     * @param {Function} compareFunction
+     * @param {Function} compareFn
      *
      * @return {Heap}
      */
-    static from(iterateOver, compareFunction = Comparator.compareFnAscending) {
-        const aHeap = new StableHeap(compareFunction)
+    static from(iterateOver, compareFn = Comparator.compareFnAscending) {
+        const aHeap = new StableHeap(compareFn)
 
         for (const pushItem of iterateOver) aHeap.push(pushItem)
 
@@ -154,20 +154,20 @@ class StableMaxHeap extends StableHeap {
     /**
      * @constructor
      *
-     * @param {Function} compareFunction
+     * @param {Function} compareFn
      */
-    constructor(compareFunction = Comparator.compareFnDescending) {
-        super(compareFunction)
+    constructor(compareFn = Comparator.compareFnDescending) {
+        super(compareFn)
     }
 
     /**
      * @param {Iterable} iterateOver
-     * @param {Function} compareFunction
+     * @param {Function} compareFn
      *
      * @return {Heap}
      */
-    static from(iterateOver, compareFunction = Comparator.compareFnDescending) {
-        return StableHeap.from(iterateOver, compareFunction)
+    static from(iterateOver, compareFn = Comparator.compareFnDescending) {
+        return StableHeap.from(iterateOver, compareFn)
     }
 }
 

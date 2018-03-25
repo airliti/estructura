@@ -9,7 +9,7 @@ class Heap {
     /**
      * @constructor
      *
-     * @param {Function} compareFunction A Function used to order each item within the
+     * @param {Function} compareFn A Function used to order each item within the
      *                               Heap.
      *
      * @example
@@ -32,20 +32,9 @@ class Heap {
      *     }
      * )
      */
-    constructor(compareFunction = Comparator.compareFnAscending) {
-        /**
-         * @private
-         *
-         * @type {Function}
-         */
-        this._compareFunction = compareFunction
-
-        /**
-         * @private
-         *
-         * @type {*}
-         */
-        this._itemCollection = []
+    constructor(compareFn = Comparator.compareFnAscending) {
+        this.compareFn_ = compareFn
+        this.heapData_ = []
 
         /**
          * @type {Number}
@@ -63,24 +52,20 @@ class Heap {
     /**
      * @private
      *
-     * @param {Function} compareFunction
-     * @param {Array.<*>} itemCollection
-     * @param {*} pushedItem
+     * @param {Function} compareFn
+     * @param {Array.<*>} heapData
+     * @param {*} bubbleUp
      * @param {Number} idxNr
      */
-    _bubbleUp(compareFunction, itemCollection, pushedItem, idxNr) {
-        //
-        // @type {Number}
-        //
+    bubbleUp_(compareFn, heapData, bubbleUp, idxNr) {
         let parentIdxNr
 
-        //
-        // Go from the last item within the Collection - the "pushedItem" - to each
-        // Parent until we reach our final destination.
-        //
-        while ((parentIdxNr = ((idxNr - 1) >> 1)) >= 0 && compareFunction(itemCollection[parentIdxNr], pushedItem) > 0) {
-            itemCollection[idxNr] = itemCollection[parentIdxNr]
-            itemCollection[parentIdxNr] = pushedItem
+        /**
+         *
+         */
+        while ((parentIdxNr = ((idxNr - 1) >> 1)) >= 0 && compareFn(heapData[parentIdxNr], bubbleUp) > 0) {
+            heapData[idxNr] = heapData[parentIdxNr]
+            heapData[parentIdxNr] = bubbleUp
 
             idxNr = parentIdxNr
         }
@@ -91,7 +76,7 @@ class Heap {
      *
      * `O(log n)`
      *
-     * @param {*} pushItem
+     * @param {*} aValue
      *
      * @return {Number} The new size of the Heap.
      *
@@ -102,18 +87,11 @@ class Heap {
      * aHeap.push('John Doe')
      * >>> 1
      */
-    push(pushItem) {
-        //
-        // @type {Array.<*>}
-        //
-        const itemCollection = this._itemCollection
+    push(aValue) {
+        const heapData = this.heapData_
+        heapData.push(aValue)
 
-        //
-        // @see this._itemCollection
-        //
-        itemCollection.push(pushItem)
-
-        this._bubbleUp(this._compareFunction, itemCollection, pushItem, this.size)
+        this.bubbleUp_(this.compareFn_, heapData, aValue, this.size)
 
         return ++this.size
     }
@@ -121,37 +99,26 @@ class Heap {
     /**
      * @private
      *
-     * @param {Function} compareFunction
-     * @param {Array.<*>} itemCollection
+     * @param {Function} compareFn
+     * @param {Array.<*>} heapData
+     * @param {*} sinkDownEntry
+     * @param {Number} idxNr
      */
-    _sinkDown(compareFunction, itemCollection, shiftedItem, idxNr) {
-        //
-        // Create a reference to the first and second Child.
-        //
-        // @type {Number}
-        //
+    sinkDown_(compareFn, heapData, sinkDownEntry, idxNr) {
         let fChildIdxNr, sChildIdxNr
 
         while (true) {
             fChildIdxNr = (idxNr << 1) + 1, sChildIdxNr = fChildIdxNr + 1
 
-            if (fChildIdxNr >= itemCollection.length) break
+            if (fChildIdxNr >= heapData.length) break
 
-            //
-            // Based on whether the current Heap is a Min or Max Heap, we'll use
-            // either the "lesser" or "bigger" Child.
-            //
-            if (sChildIdxNr < itemCollection.length && compareFunction(itemCollection[fChildIdxNr], itemCollection[sChildIdxNr]) > 0) {
+            if (sChildIdxNr < heapData.length && compareFn(heapData[fChildIdxNr], heapData[sChildIdxNr]) > 0) {
                 fChildIdxNr = sChildIdxNr
             }
 
-            //
-            // The Child is "bigger" or "smaller" than the item we've appended to
-            // our item Collection. Is dependent on #._compareFunction.
-            //
-            if (compareFunction(itemCollection[fChildIdxNr], shiftedItem) <= 0) {
-                itemCollection[idxNr] = itemCollection[fChildIdxNr]
-                itemCollection[fChildIdxNr] = shiftedItem
+            if (compareFn(heapData[fChildIdxNr], sinkDownEntry) <= 0) {
+                heapData[idxNr] = heapData[fChildIdxNr]
+                heapData[fChildIdxNr] = sinkDownEntry
             }
 
             idxNr = fChildIdxNr
@@ -180,7 +147,7 @@ class Heap {
      * @alias peekFront
      */
     peek() {
-        return this._itemCollection[0]
+        return this.heapData_[0]
     }
 
     /**
@@ -205,33 +172,15 @@ class Heap {
     pop() {
         if (this.size === 0) return undefined
 
-        //
-        // @type {Number}
-        //
-        this.size--
+        const heapData = this.heapData_
 
-        if (this.size === 0) return this._itemCollection.pop()
+        if (--this.size < 1) return heapData.pop()
 
-        //
-        // @type {Array.<*>}
-        //
-        const itemCollection = this._itemCollection
+        const rEntry = heapData[0], sinkDownEntry = heapData[0] = heapData.pop()
 
-        //
-        // @type {*}
-        //
-        const rootItem = itemCollection[0]
+        this.sinkDown_(this.compareFn_, heapData, sinkDownEntry, 0)
 
-        //
-        // Replace the old Root with the last item within the Heap.
-        //
-        // @type {*}
-        //
-        const shiftedItem = itemCollection[0] = itemCollection.pop()
-
-        this._sinkDown(this._compareFunction, itemCollection, shiftedItem, 0)
-
-        return rootItem
+        return rEntry
     }
 
     /**
@@ -254,28 +203,20 @@ class Heap {
      * >>> [ "A", "B" ]
      */
     toArray() {
-        const aHeap = this.constructor.fromHeap(this)
+        const aHeap = this.constructor.fromHeap(this), heapData = []
 
-        //
-        // Store the current Heap as an Array.
-        //
-        // @type {Array.<*>}
-        //
-        const itemCollection = []
+        while (aHeap.size) heapData.push(
+            aHeap.pop()
+        )
 
-        //
-        // Pop each item of the Heap and append it to the item Collection.
-        //
-        while (aHeap.size) itemCollection.push(aHeap.pop())
-
-        return itemCollection
+        return heapData
     }
 
     /**
      * Create a Heap by giving an Array, Set or another Iterable.
      *
      * @param {Iterable} iterateOver
-     * @param {Function} compareFunction
+     * @param {Function} compareFn
      *
      * @return {Heap}
      *
@@ -295,10 +236,10 @@ class Heap {
      *     }
      * )
      */
-    static from(iterateOver, compareFunction = Comparator.compareFnAscending) {
-        const aHeap = new Heap(compareFunction)
+    static from(iterateOver, compareFn = Comparator.compareFnAscending) {
+        const aHeap = new Heap(compareFn)
 
-        for (const pushItem of iterateOver) aHeap.push(pushItem)
+        for (const aValue of iterateOver) aHeap.push(aValue)
 
         return aHeap
     }
@@ -331,26 +272,12 @@ class Heap {
     static fromHeap(useHeap) {
         const aHeap = new useHeap.constructor(null)
 
-        //
-        // Link the current comparison Function to the new Heap.
-        //
-        // @type {Function}
-        //
-        aHeap._compareFunction = useHeap._compareFunction
+        // Copy the current `compareFn_`:
+        aHeap.compareFn_ = useHeap.compareFn_
 
-        //
-        // Copy the current Data Structure instead of using the #.from Function and
-        // then appending each item.
-        //
-        // @type {Array.<*>}
-        //
-        aHeap._itemCollection = useHeap._itemCollection.slice()
+        // Create a shallow copy and insert the `heapData_`:
+        aHeap.heapData_ = useHeap.heapData_.slice()
 
-        //
-        // Update the #.size value of the Heap to match the Data Structure.
-        //
-        // @type {Number}
-        //
         aHeap.size = useHeap.size
 
         return aHeap
@@ -364,7 +291,7 @@ class MinHeap extends Heap {
     /**
      * @constructor
      *
-     * @param {Function} compareFunction
+     * @param {Function} compareFn
      *
      * @example
      *
@@ -372,13 +299,13 @@ class MinHeap extends Heap {
      *
      * const minHeap = new MinHeap()
      */
-    constructor(compareFunction = Comparator.compareFnAscending) {
-        super(compareFunction)
+    constructor(compareFn = Comparator.compareFnAscending) {
+        super(compareFn)
     }
 
     /**
      * @param {Iterable} iterateOver
-     * @param {Function} compareFunction
+     * @param {Function} compareFn
      *
      * @return {Heap}
      *
@@ -386,8 +313,8 @@ class MinHeap extends Heap {
      *
      * const minHeap = MinHeap.from(['A', 'C', 'B', 'D'])
      */
-    static from(iterateOver, compareFunction = Comparator.compareFnAscending) {
-        return Heap.from(iterateOver, compareFunction)
+    static from(iterateOver, compareFn = Comparator.compareFnAscending) {
+        return Heap.from(iterateOver, compareFn)
     }
 }
 
@@ -398,7 +325,7 @@ class MaxHeap extends Heap {
     /**
      * @constructor
      *
-     * @param {Function} compareFunction
+     * @param {Function} compareFn
      *
      * @example
      *
@@ -406,13 +333,13 @@ class MaxHeap extends Heap {
      *
      * const maxHeap = new MaxHeap()
      */
-    constructor(compareFunction = Comparator.compareFnDescending) {
-        super(compareFunction)
+    constructor(compareFn = Comparator.compareFnDescending) {
+        super(compareFn)
     }
 
     /**
      * @param {Iterable} iterateOver
-     * @param {Function} compareFunction
+     * @param {Function} compareFn
      *
      * @return {Heap}
      *
@@ -420,8 +347,8 @@ class MaxHeap extends Heap {
      *
      * const maxHeap = MaxHeap.from(['A', 'C', 'B', 'D'])
      */
-    static from(iterateOver, compareFunction = Comparator.compareFnDescending) {
-        return Heap.from(iterateOver, compareFunction)
+    static from(iterateOver, compareFn = Comparator.compareFnDescending) {
+        return Heap.from(iterateOver, compareFn)
     }
 }
 

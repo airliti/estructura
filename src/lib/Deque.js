@@ -441,7 +441,7 @@ class Deque {
     static from(iterateOver) {
         const aDeque = new Deque()
 
-        for (const pushItem of iterateOver) aDeque.push(pushItem)
+        for (const aValue of iterateOver) aDeque.push(aValue)
 
         return aDeque
     }

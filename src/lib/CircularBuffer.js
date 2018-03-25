@@ -284,7 +284,7 @@ class CircularBuffer {
     static from(iterateOver) {
         const circularBuffer = new CircularBuffer(Infinity)
 
-        for (const pushItem of iterateOver) circularBuffer.push(pushItem)
+        for (const aValue of iterateOver) circularBuffer.push(aValue)
 
         /**
          * Replace `Infinity` with an actual value.

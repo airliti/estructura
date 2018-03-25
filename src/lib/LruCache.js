@@ -1,4 +1,8 @@
-const EventEmitter = require('events')
+const EventEmitter = require('events'), Heap = require('./Heap')
+
+class NilW8q7dOsP {
+
+}
 
 /**
  * @class {LruCache}
@@ -7,7 +11,7 @@ class LruCache {
     /**
      * @constructor
      *
-     * @param {{maxSize: Number, maxAge: Number}} cacheConfig
+     * @param {{maxSize: Number, maxAge: Number, sizeCalculator: Function}} cacheConfig
      *
      * @example
      *
@@ -28,82 +32,48 @@ class LruCache {
      * const lruCache = new LruCache({maxSize: 20, sizeCalculator: function() { return 1 }, maxAge: 60 * 1000})
      */
     constructor(cacheConfig = {}) {
-        /**
-         * The maximum size of the Lru Cache.
-         *
-         * @type {Number}
-         *
-         * @default Infinity
-         */
-        this._maxSize = cacheConfig.maxSize || Infinity
+        this.maxSize_ = cacheConfig.maxSize || Infinity
 
         Object.defineProperty(this, 'maxSize', {
-            get: () => this._maxSize,
+            get: () => this.maxSize_,
             set: (newValue) => {
-                this._maxSize = newValue, this._trim()
+                this.maxSize_ = newValue, this.trim_()
             }
         })
 
-        /**
-         * Used to calculate the size of each item within the Cache.
-         *
-         * @type {Function}
-         *
-         * @default function() { return 1 }
-         */
         this.sizeCalculator = cacheConfig.sizeCalculator || function () {
             return 1
         }
 
-        /**
-         * The maximum age of an item in the Cache, defined in Milliseconds.
-         *
-         * @type {Number}
-         *
-         * @default Infinity
-         */
-        this._maxAge = cacheConfig.maxAge || Infinity
+        this.maxAge_ = cacheConfig.maxAge || Infinity
 
         Object.defineProperty(this, 'maxAge', {
-            get: () => this._maxAge,
+            get: () => this.maxAge_,
             set: (newValue) => {
-                this._maxAge = newValue, this.prune()
+                this.maxAge_ = newValue, this.prune()
             }
         })
 
-        /**
-         * @private
-         *
-         * @type {Map}
-         */
-        this._itemMap = new Map()
+        this.itemMap_ = new Map()
 
-        /**
-         * @private
-         *
-         * @type {{uniqueId: (String | Function | Object), lNode: *, rNode: *, createdOrUpdatedAt: Number, aValue: *}}
-         */
-        this._headNode = null
+        this.pHead_ = {
+            aValue: new NilW8q7dOsP(),
 
-        /**
-         * @private
-         *
-         * @type {{uniqueId: (String | Function | Object), lNode: *, rNode: *, createdOrUpdatedAt: Number, aValue: *}}
-         */
-        this._tailNode = null
+            lNode: null,
+            rNode: null
+        }
+        this.pTail_ = {
+            aValue: new NilW8q7dOsP(),
 
-        /**
-         * @private
-         *
-         * @type {EventEmitter}
-         */
-        this._eventEmitter = new EventEmitter()
+            lNode: null,
+            rNode: null
+        }
 
-        /**
-         * The total size of the Lru Cache.
-         *
-         * @type {Number}
-         */
+        this.pHead_.rNode = this.pTail_
+        this.pTail_.lNode = this.pHead_
+
+        this.eventEmitter_ = new EventEmitter()
+
         this.size = 0
     }
 
@@ -112,86 +82,30 @@ class LruCache {
      *
      * @param {{uniqueId: (String | Function | Object), lNode: *, rNode: *, createdOrUpdatedAt: Number, aValue: *}} aNode
      */
-    _unshiftNode(aNode) {
-        if (aNode === this._headNode) return
+    unshiftNode_(aNode) {
+        if (aNode === this.pHead_.rNode) return
 
-        //
-        // +---+---+---+---+---+
-        // | N | A | B | C | N |
-        // +---+---+---+---+---+
-        //
-        // N: null
-        //
-        // Case 1: Unshift B
-        //
-        // if ( A ) A.rNode = C
-        // if ( C ) C.lNode = A
-        //
-        // Case 2: Unshift A
-        //
-        // if ( N ) -> null
-        // if ( B ) B.lNode = null
-        //
-        // Case 3: Unshift C
-        //
-        // if ( B ) B.rNode = null
-        // if ( N ) -> null
-        //
         if (aNode.lNode) aNode.lNode.rNode = aNode.rNode
         if (aNode.rNode) aNode.rNode.lNode = aNode.lNode
 
-        //
-        // +---+---+---+---+---+
-        // | N | A | B | C | N |
-        // +---+---+---+---+---+
-        //
-        // -> C has to become A. The new Tail is B.
-        //
-        if (aNode === this._tailNode) this._tailNode = aNode.lNode
+        aNode.lNode = this.pHead_
+        aNode.rNode = this.pHead_.rNode
 
-        //
-        // +---+---+---+---+---+
-        // | N | A | B | C | N |
-        // +---+---+---+---+---+
-        //
-        // -> B has to become A. Point the "lNode" of A to B.
-        //
-        if (this._headNode) this._headNode.lNode = aNode
-
-        //
-        // +---+---+---+---+---+
-        // | N | A | B | C | N |
-        // +---+---+---+---+---+
-        //
-        // -> B has to become A. The Head cannot have a "lNode"; but it can point
-        //    to A as "rNode";
-        //
-        aNode.lNode = null
-        aNode.rNode = this._headNode
-
-        this._headNode = aNode
-
-        //
-        // +---+---+---+---+---+
-        // | N | A | N | N | N |
-        // +---+---+---+---+---+
-        //
-        // -> Add B. B does NOT exist. A has to become the Tail of the Cache.
-        //
-        if (!this._tailNode) this._tailNode = this._headNode.rNode
+        this.pHead_.rNode.lNode = aNode
+        this.pHead_.rNode = aNode
     }
 
     /**
      * @private
      *
-     * @param {{uniqueId: (String | Function | Object), lNode: *, rNode: *, createdOrUpdatedAt: Number, aValue: *}}
+     * @param {{uniqueId: (String | Function | Object), lNode: *, rNode: *, createdOrUpdatedAt: Number, aValue: *}} aNode
      */
-    _unlinkNode(aNode) {
-        if (aNode.lNode) aNode.lNode.rNode = aNode.rNode
-        if (aNode.rNode) aNode.rNode.lNode = aNode.lNode
+    unlinkNode_(aNode) {
+        aNode.lNode.rNode = aNode.rNode
+        aNode.rNode.lNode = aNode.lNode
 
-        if (aNode === this._headNode) this._headNode = aNode.rNode
-        if (aNode === this._tailNode) this._tailNode = aNode.lNode
+        aNode.lNode = null
+        aNode.rNode = null
     }
 
     /**
@@ -201,35 +115,16 @@ class LruCache {
      *
      * @return {Boolean}
      */
-    _destroyNode(aNode) {
-        //
-        // Delete the Node from the #._itemMap. If it is NOT present within the Map,
-        // return "false";
-        //
-        // @see #._itemMap
-        //
-        if (typeof aNode !== 'object' || this._itemMap.delete(aNode.uniqueId) === false) return false
+    destroyNode_(aNode) {
+        if (typeof aNode !== 'object' || this.itemMap_.delete(aNode.uniqueId) === false) return false
 
-        //
-        // @type {Number}
-        //
-        this.size = this.size - aNode.calculatedSize
+        this.size = this.size - aNode.sizeAttribute
 
-        //
-        // Remove the Node from the Double Linked List and manage the Reference(s)
-        // from and to the Node.
-        //
-        // @see #._unlinkNode
-        //
-        this._unlinkNode(aNode)
+        // Remove the Node and manage the reference(s):
+        this.unlinkNode_(aNode)
 
-        //
-        // Use the Event Emitter to broadcast an Event to the interested who can
-        // then take action based on the disposed value and "uniqueId";
-        //
-        // @see #._eventEmitter
-        //
-        this._eventEmitter.emit('dispose', aNode.aValue, aNode.uniqueId)
+        // Use the Event Emitter to broadcast the `dispose` event:
+        this.eventEmitter_.emit('dispose', aNode.aValue, aNode.uniqueId)
 
         return true
     }
@@ -241,19 +136,13 @@ class LruCache {
      *
      * @return {{uniqueId: (String | Function | Object), lNode: *, rNode: *, createdOrUpdatedAt: Number, aValue: *} | undefined}
      */
-    _getNodeIfNotStale(uniqueId) {
-        const aNode = this._itemMap.get(uniqueId)
+    getNodeIfNotStale_(uniqueId) {
+        const aNode = this.itemMap_.get(uniqueId)
 
         if (!aNode) return undefined
 
-        //
-        // @see maxAge
-        //
-        if (this._isStale(aNode) === true) {
-            //
-            // @see #._destroyNode
-            //
-            this._destroyNode(aNode)
+        if (this.isStale_(aNode) === true) {
+            this.destroyNode_(aNode)
 
             return undefined
         }
@@ -266,16 +155,13 @@ class LruCache {
      *
      * @see #.maxSize
      */
-    _trim() {
+    trim_() {
         if (this.maxSize === Infinity) return
 
-        //
-        // @type {{uniqueId: (String | Function | Object), lNode: *, rNode: *, createdOrUpdatedAt: Number, aValue: *} | undefined}
-        //
-        let aNode = this._tailNode || this._headNode
+        let aNode = this.pTail_ || this.pHead_
 
         while (aNode && this.size > this.maxSize) {
-            this._destroyNode(aNode)
+            this.destroyNode_(aNode)
 
             aNode = aNode.lNode
         }
@@ -284,11 +170,11 @@ class LruCache {
     /**
      * @private
      *
-     * @param {{uniqueId: (String | Function | Object), lNode: *, rNode: *, createdOrUpdatedAt: Number, aValue: *}}
+     * @param {{uniqueId: (String | Function | Object), lNode: *, rNode: *, createdOrUpdatedAt: Number, aValue: *}} aNode
      *
      * @return {Boolean}
      */
-    _isStale(aNode) {
+    isStale_(aNode) {
         return aNode.createdOrUpdatedAt !== Infinity && aNode.createdOrUpdatedAt + this.maxAge < Date.now()
     }
 
@@ -306,22 +192,16 @@ class LruCache {
      * lruCache.set('Key-02', 'Jane Doe')
      */
     set(uniqueId, aValue) {
-        //
-        // @type {{uniqueId: (String | Function | Object), lNode: *, rNode: *, createdOrUpdatedAt: Number, aValue: *}}
-        //
         let aNode
 
-        //
-        // The current "uniqueId" is already defined within the Cache, dispose the
-        // item but keep the Node, we'll #.unshift it.
-        //
-        if (this._itemMap.has(uniqueId) === true) {
-            aNode = this._itemMap.get(uniqueId)
+        // Replace:
+        if (this.itemMap_.has(uniqueId) === true) {
+            aNode = this.itemMap_.get(uniqueId)
 
-            this.size = this.size - aNode.calculatedSize
+            this.size = this.size - aNode.sizeAttribute
             this.size = this.size + this.sizeCalculator(aValue, uniqueId)
 
-            this._eventEmitter.emit('dispose', aNode.aValue, aNode.uniqueId)
+            this.eventEmitter_.emit('dispose', aNode.aValue, aNode.uniqueId)
         }
         else {
             aNode = {
@@ -333,38 +213,21 @@ class LruCache {
                 createdOrUpdatedAt: null,
                 aValue: null,
 
-                calculatedSize: this.sizeCalculator(aValue, uniqueId)
+                sizeAttribute: this.sizeCalculator(aValue, uniqueId)
             }
 
-            this.size = this.size + aNode.calculatedSize
+            this.size = this.size + aNode.sizeAttribute
         }
 
-        // 
-        // @type {Number}
-        //
         aNode.createdOrUpdatedAt = Date.now()
-
-        // 
-        // @type {*}
-        //
         aNode.aValue = aValue
 
-        //
-        // Modify the Cache to account for the new size.
-        //
-        this._trim()
+        this.trim_()
+        this.unshiftNode_(aNode)
 
-        //
-        // Replace the Head with the newest Node within the Least Recently Used
-        // Cache.
-        //
-        this._unshiftNode(aNode)
+        this.itemMap_.set(uniqueId, aNode)
 
-        //
-        // Assign the new Node to the Map for fast access later on through the
-        // #.get Method.
-        //
-        this._itemMap.set(uniqueId, aNode)
+        return this.size
     }
 
     /**
@@ -390,14 +253,10 @@ class LruCache {
      * >>> false
      */
     has(uniqueId) {
-        if (this._itemMap.has(uniqueId) === false) return false
+        if (this.itemMap_.has(uniqueId) === false) return false
 
-        //
-        // Check if the item didn't surpass the "maxAge" and then negate the output
-        // from the #._isStale method.
-        //
-        return !this._isStale(
-            this._itemMap.get(uniqueId)
+        return !this.isStale_(
+            this.itemMap_.get(uniqueId)
         )
     }
 
@@ -417,18 +276,13 @@ class LruCache {
      * >>> John Doe
      */
     get(uniqueId) {
-        const aNode = this._getNodeIfNotStale(uniqueId)
+        const aNode = this.getNodeIfNotStale_(uniqueId)
 
         if (!aNode) return undefined
 
-        //
-        // Update the Time Stamp, point to the new "createdOrUpdatedAt" Date.
-        //
-        // @type {Number}
-        //
         aNode.createdOrUpdatedAt = Date.now()
 
-        this._unshiftNode(aNode)
+        this.unshiftNode_(aNode)
 
         return aNode.aValue
     }
@@ -455,20 +309,12 @@ class LruCache {
      * >>> Finished.
      */
     async getOrCreate(uniqueId, ifNotDefined) {
-        const aNode = this._getNodeIfNotStale(uniqueId)
+        const aNode = this.getNodeIfNotStale_(uniqueId)
 
         if (aNode) return aNode.aValue
 
-        //
-        // @type {*}
-        //
         const aValue = await ifNotDefined()
 
-        //
-        // Store the newly created value within the Cache.
-        //
-        // @see #.set
-        //
         this.set(uniqueId, aValue)
 
         return aValue
@@ -518,20 +364,12 @@ class LruCache {
      * >>> #.getOrCreateSync
      */
     getOrCreateSync(uniqueId, ifNotDefined) {
-        const aNode = this._getNodeIfNotStale(uniqueId)
+        const aNode = this.getNodeIfNotStale_(uniqueId)
 
         if (aNode) return aNode.aValue
 
-        //
-        // Use the supplied Function to generate the new value.
-        //
-        // @type {*}
-        //
         const aValue = ifNotDefined()
 
-        //
-        // @see #.set
-        //
         this.set(uniqueId, aValue)
 
         return aValue
@@ -561,27 +399,30 @@ class LruCache {
      * >>> false
      */
     delete(uniqueId) {
-        return this._destroyNode(
-            this._itemMap.get(uniqueId)
+        return this.destroyNode_(
+            this.itemMap_.get(uniqueId)
         )
     }
 
     /**
-     * Actively iterate through each Node and check whether the "maxAge" hasn't
-     * surpassed.
+     * Iterate through each Node & check `maxAge` value.
      *
      * `O(n)`
      */
     prune() {
-        //
-        // @type {{uniqueId: (String | Function | Object), lNode: *, rNode: *, createdOrUpdatedAt: Number, aValue: *}}
-        //
-        let curNode = this._headNode
+        let rNode = this.pHead_.rNode, tNode = null
 
-        while (curNode) {
-            if (this._isStale(curNode) === true) this._destroyNode(curNode)
+        while (!(rNode.aValue instanceof NilW8q7dOsP)) {
+            if (this.isStale_(rNode) === true) {
+                tNode = rNode.rNode
 
-            curNode = curNode.rNode
+                this.destroyNode_(rNode)
+
+                rNode = tNode
+            }
+            else {
+                rNode = rNode.rNode
+            }
         }
     }
 
@@ -604,7 +445,7 @@ class LruCache {
      * lruCache.set('Key-02', 'I will push out Key-01 which will trigger the "dispose" Event.')
      */
     on(eventName, aCallback) {
-        this._eventEmitter.on(eventName, aCallback)
+        this.eventEmitter_.on(eventName, aCallback)
     }
 
     /**
@@ -640,7 +481,7 @@ class Recorder extends LruCache {
     /**
      * @constructor
      *
-     * @param {{maxSize: Number, maxAge: Number}}
+     * @param {{maxSize: Number, maxAge: Number, sizeCalculator: Function}} cacheConfig
      *
      * @example
      *
@@ -658,61 +499,17 @@ class Recorder extends LruCache {
     constructor(cacheConfig) {
         super(cacheConfig)
 
-        /**
-         * Updated when the `#.has` Function returned `true`.
-         *
-         * @type {Number}
-         */
         this.hasHitCount = 0
-
-        /**
-         * Incremented when the `#.has` Function returned `false`.
-         *
-         * @type {Number}
-         */
         this.hasMissCount = 0
 
-        /**
-         * Equal to `this.hasHitCount / (this.hasHitCount + this.hasMissCount)`.
-         *
-         * @type {Number}
-         */
         this.hasHitMissRatio = 0
 
-        /**
-         * Count whenever an item was found using the `#.get` Function.
-         *
-         * @type {Number}
-         */
         this.getHitCount = 0
-
-        /**
-         * Count whenever the `#.get` Function returned `undefined` because an
-         * item was NOT present within the Cache.
-         *
-         * @type {Number}
-         */
         this.getMissCount = 0
 
-        /**
-         * A percentage based on the Hit and Miss Count.
-         *
-         * @type {Number}
-         */
         this.getHitMissRatio = 0
 
-        /**
-         * Count the usage of the `#.set` Function.
-         *
-         * @type {Number}
-         */
         this.nrDefined = 0
-
-        /**
-         * Count the usage of the disposed Event.
-         *
-         * @type {Number}
-         */
         this.nrDisposed = 0
 
         this.on('dispose', () => this.nrDisposed++)
@@ -722,18 +519,13 @@ class Recorder extends LruCache {
      * @private
      *
      * @param {Number} hitOrMiss
+     * @param {String} functionName
      */
     _hitOrMiss(hitOrMiss, functionName) {
         const hitName = functionName + 'HitCount', missName = functionName + 'MissCount'
 
         hitOrMiss > 0 ? this[hitName]++ : this[missName]++
 
-        //
-        // Update the "getHitMissRatio" with the newly calculated Hit and Miss
-        // Ratio.
-        //
-        // @type {Number}
-        //
         this[functionName + 'HitMissRatio'] = this[hitName] / (this[hitName] + this[missName])
     }
 
@@ -741,12 +533,8 @@ class Recorder extends LruCache {
      * @param {String | Function | Object} uniqueId
      */
     has(uniqueId) {
-        const aNode = super._getNodeIfNotStale(uniqueId)
+        const aNode = super.getNodeIfNotStale_(uniqueId)
 
-        //
-        // Update the `hasHitCount`, `hasMissCount` and the value of `hasHitMissRatio`
-        // according to whether `aNode` has been found.
-        //
         if (aNode) {
             this._hitOrMiss(+1, 'has')
 
@@ -764,12 +552,8 @@ class Recorder extends LruCache {
      * @param {String | Function | Object} uniqueId
      */
     get(uniqueId) {
-        const aNode = super._getNodeIfNotStale(uniqueId)
+        const aNode = super.getNodeIfNotStale_(uniqueId)
 
-        //
-        // Update the value of `getHitCount`, `getMissCount` and `getHitMissRatio`
-        // according to whether `aNode` is an Object containing an usable value.
-        //
         if (aNode) {
             this._hitOrMiss(+1, 'get')
 
@@ -785,11 +569,13 @@ class Recorder extends LruCache {
     /**
      * @param {String | Function | Object} uniqueId
      * @param {*} aValue
+     *
+     * @return {Number}
      */
     set(uniqueId, aValue) {
         this.nrDefined++
 
-        super.set(uniqueId, aValue)
+        return super.set(uniqueId, aValue)
     }
 }
 
