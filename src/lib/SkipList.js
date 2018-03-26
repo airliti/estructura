@@ -1,9 +1,9 @@
 const Comparator = require('./util/Comparator')
 
 /**
- * @class {Nil}
+ * @class {NilXj4AxRgY}
  */
-class Nil {
+class NilXj4AxRgY {
 
 }
 
@@ -26,7 +26,7 @@ class SkipList {
      */
     constructor(compareFn = Comparator.compareFnAscending, maxHeight = 32, promotingProbability = .5) {
         this.pHead_ = {
-            aValue: new Nil,
+            aValue: new NilXj4AxRgY,
 
             rNode: null,
             dwnArr: []
@@ -80,7 +80,7 @@ class SkipList {
         const compareFn = this.compareFn_
 
         while (lftNode) {
-            if (lftNode.aValue instanceof Nil) {
+            if (lftNode.aValue instanceof NilXj4AxRgY) {
                 if (lftNode.rNode) {
                     prvNode = lftNode
                     lftNode = prvNode.rNode
@@ -205,7 +205,7 @@ class SkipList {
         let searchValue = undefined
 
         while (lftNode && !searchValue) {
-            if (lftNode.aValue instanceof Nil) {
+            if (lftNode.aValue instanceof NilXj4AxRgY) {
                 if (lftNode.rNode) {
                     prvNode = lftNode
                     lftNode = prvNode.rNode
