@@ -236,7 +236,60 @@ class SkipList {
      * >>> false
      */
     delete(aValue) {
+        let prvNode = null
+        let lftNode = this.pHead_
 
+        let curHght = this.curHeight_
+
+        let valueDeleted = false
+
+        while (lftNode && valueDeleted === false) {
+            if (lftNode.aValue instanceof NilXj4AxRgY) {
+                if (lftNode.rNode) {
+                    prvNode = lftNode
+                    lftNode = prvNode.rNode
+                }
+                else {
+                    prvNode = null
+                    lftNode = lftNode.dwnArr[--curHght]
+                }
+
+                continue
+            }
+
+            const compareOu = this.compareFn_(aValue, lftNode.aValue)
+
+            if (compareOu > 0) {
+                prvNode = lftNode
+                lftNode = prvNode.rNode
+
+                if (!lftNode) {
+                    lftNode = prvNode.dwnArr[--curHght]
+                    prvNode = null
+                }
+            }
+            else {
+                if (compareOu === 0) {
+                    prvNode.rNode = lftNode.rNode
+                    lftNode.rNode = null
+
+                    if (curHght < 1) valueDeleted = true, this.size--
+                }
+
+                lftNode = prvNode.dwnArr[--curHght]
+                prvNode = null
+            }
+        }
+
+        return valueDeleted
+
+        /**
+         * (!) Performance vs. Memory
+         *
+         * If we keep a lNode for each value, then it should be possible to lftNode.dwnArr instead of iterating through
+         * each level.
+         *
+         */
     }
 
     /**

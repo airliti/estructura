@@ -51,7 +51,39 @@ describe('SkipList', () => {
     })
 
     context('#.delete', () => {
-        it('Should be possible to delete a value from the Skip List.')
+        it('Should be possible to delete a value from the Skip List.', () => {
+            const skipList = new SkipList()
+
+            skipList.insert('D')
+            skipList.insert('B')
+            skipList.insert('C')
+            skipList.insert('A')
+
+            skipList.delete('D').should.equal(true)
+            skipList.delete('B').should.equal(true)
+
+            skipList.delete('E').should.equal(false)
+
+            skipList.size.should.equal(2)
+        })
+
+        it('Should be possible to delete a value from the Skip List, extended version.', () => {
+            const skipList = new SkipList(), deleteArr = []
+
+            for (let idxNr = 0; idxNr < 32768; idxNr++) {
+                const randomNr = Math.random()
+
+                skipList.insert(randomNr)
+
+                if (Math.random() > .5) deleteArr.push(randomNr)
+            }
+
+            deleteArr.forEach(function (aValue) {
+                skipList.delete(aValue).should.equal(true)
+            })
+
+            skipList.size.should.equal(32768 - deleteArr.length)
+        })
     })
 
     context('#.peek', () => {
