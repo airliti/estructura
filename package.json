@@ -11,5 +11,6 @@
     "grunt-babel": "^6.0.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-copy": "^1.0.0"
-  }
+  },
+  "version": "0.1.7"
 }
