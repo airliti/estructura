@@ -93,7 +93,7 @@ describe('SinglyLinkedList', () => {
         it('Should be possible to create a Singly Linked List from an Iterable.', () => {
             const singlyLinkedList = SinglyLinkedList.from(['A', 'B', 'C', 'D'])
 
-            console.log(singlyLinkedList)
+            singlyLinkedList.size.should.equal(4)
 
             singlyLinkedList.shift().should.equal('A')
             singlyLinkedList.shift().should.equal('B')

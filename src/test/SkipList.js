@@ -69,6 +69,15 @@ describe('SkipList', () => {
     })
 
     context('#.from', () => {
-        it('Should be possible to create a Skip List from an Iterable.')
+        it('Should be possible to create a Skip List from an Iterable.', () => {
+            const skipList = SkipList.from(['A', 'C', 'D', 'B'])
+
+            skipList.size.should.equal(4)
+
+            skipList.search('A').should.equal('A')
+            skipList.search('B').should.equal('B')
+            skipList.search('C').should.equal('C')
+            skipList.search('D').should.equal('D')
+        })
     })
 })
