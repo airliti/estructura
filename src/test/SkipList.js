@@ -50,6 +50,10 @@ describe('SkipList', () => {
         })
     })
 
+    context('#.delete', () => {
+        it('Should be possible to delete a value from the Skip List.')
+    })
+
     context('#.toArray', () => {
         it('Should be possible to convert the Skip List into an array.', () => {
             const skipList = new SkipList()

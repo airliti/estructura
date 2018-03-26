@@ -208,6 +208,36 @@ class SkipList {
     }
 
     /**
+     * Remove a value from the Skip List.
+     *
+     * Average O(log n), Worst Case O(n)
+     *
+     * @param {*} aValue
+     *
+     * @return {Boolean}
+     *
+     * @example
+     *
+     * const skipList = new SkipList()
+     * skipList.insert('Jane Doe')
+     * skipList.insert('John Doe')
+     *
+     * skipList.delete('John Doe')
+     * >>> true
+     *
+     * @example
+     *
+     * const skipList = new SkipList()
+     * skipList.insert('John Doe')
+     *
+     * skipList.delete('Jane Doe')
+     * >>> false
+     */
+    delete(aValue) {
+
+    }
+
+    /**
      * Convert the Skip List to an array.
      *
      * `O(n)`
@@ -273,4 +303,5 @@ class SkipList {
     }*/
 }
 
-module.exports = SkipList
+module
+    .exports = SkipList
