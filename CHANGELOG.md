@@ -1,3 +1,7 @@
+2018-03-26 0.1.7 airliti
+
+    * Released version 0.1.7 on Npm
+
 2018-03-26 airliti
 
     * Renamed the Single Linked List to Singly Linked List

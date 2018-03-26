@@ -24,7 +24,9 @@ Note: the Double Linked List should NOT be used anymore. Use the Doubly Linked L
 
 * [Queue](https://github.com/airliti/estructura/wiki/Queue)
 
-* [Single Linked List](https://github.com/airliti/estructura/wiki/Single-Linked-List)
+* [Singly Linked List](https://github.com/airliti/estructura/wiki/Singly-Linked-List)
+
+* [Skip List](https://github.com/airliti/estructura/wiki/Skip-List)
 
 * [Stable Heap](https://github.com/airliti/estructura/wiki/Stable-Heap)
 
