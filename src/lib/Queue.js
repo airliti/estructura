@@ -164,7 +164,7 @@ class Queue {
     static from(iterateOver) {
         const aQueue = new Queue()
 
-        for (const enqueueItem of iterateOver) aQueue.enqueue(enqueueItem)
+        for (const aValue of iterateOver) aQueue.enqueue(aValue)
 
         return aQueue
     }

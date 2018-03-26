@@ -115,23 +115,6 @@ class SkipList {
 
         lMost.reverse()
 
-        /*if (insertAt > this.curHeight_) {
-            for (let lvlNr = 0, maxNr = insertAt - this.curHeight_; lvlNr < maxNr; lvlNr++) {
-                this.pHead_ = {
-                    aValue: this.pHead_.aValue,
-
-                    rNode: null,
-                    dwnArr: this.pHead_.dwnArr.slice().concat([this.pHead_])
-                }
-
-                lMost.push(this.pHead_)
-            }
-
-            console.log(lMost, 'curHeight', this.curHeight_, 'insertAt', insertAt)
-
-            this.curHeight_ = Math.max(this.curHeight_, insertAt)
-        }*/
-
         if (insertAt > this.curHeight_) {
             this.pHead_ = {
                 aValue: this.pHead_.aValue,
@@ -159,23 +142,6 @@ class SkipList {
 
             dwnArr.push(rNode)
         }
-
-        /*lMost.splice(insertAt + 1)
-
-        const dwnArr = []
-
-        for (const lNode of lMost) {
-            const rNode = {
-                aValue: aValue,
-
-                rNode: lNode.rNode,
-                dwnArr: dwnArr.slice()
-            }
-
-            lNode.rNode = rNode
-
-            dwnArr.push(rNode)
-        }*/
 
         return ++this.size
     }
@@ -247,21 +213,20 @@ class SkipList {
      * `O(n)`
      *
      * @return {Array.<*>}
+     *
+     * @example
+     *
+     * const skipList = new SkipList()
+     * skipList.insert('A')
+     * skipList.insert('C')
+     * skipList.insert('D')
+     * skipList.insert('B')
+     *
+     * skipList.toArray()
+     * >>> [ "A", "B", "C", "D" ]
      */
     toArray() {
         const toArray = []
-
-        /*for (let lvlNr = 0, maxNr = this.curHeight_; lvlNr < maxNr; lvlNr++) {
-            let rNode = (this.pHead_.dwnArr[lvlNr] || this.pHead_).rNode, arrLength = 0
-
-            while (rNode) {
-                arrLength++
-
-                rNode = rNode.rNode
-            }
-
-            console.log('#.toArray', '\n', 'At', lvlNr, 'with', arrLength, 'item(s).')
-        }*/
 
         let lNode = (this.pHead_.dwnArr.length > 0 ? this.pHead_.dwnArr[0] : this.pHead_).rNode
 
@@ -273,6 +238,39 @@ class SkipList {
 
         return toArray
     }
+
+    /**
+     * Create a Skip List from an Iterable.
+     *
+     * @param {Iterable} iterateOver
+     * @param {Function} compareFn
+     *
+     * @return {SkipList}
+     *
+     * @example
+     *
+     * const skipList = SkipList.from(['A', 'C', 'D', 'B'])
+     * >> SkipList
+     */
+    static from(iterateOver, compareFn = Comparator.compareFnAscending) {
+        const skipList = new SkipList(compareFn)
+
+        for (const aValue of iterateOver) skipList.insert(aValue)
+
+        return skipList
+    }
+
+    /*for (let lvlNr = 0, maxNr = this.curHeight_; lvlNr < maxNr; lvlNr++) {
+        let rNode = (this.pHead_.dwnArr[lvlNr] || this.pHead_).rNode, arrLength = 0
+
+        while (rNode) {
+            arrLength++
+
+            rNode = rNode.rNode
+        }
+
+        console.log('#.toArray', '\n', 'At', lvlNr, 'with', arrLength, 'item(s).')
+    }*/
 }
 
 module.exports = SkipList

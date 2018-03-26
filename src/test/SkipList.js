@@ -31,7 +31,7 @@ describe('SkipList', () => {
             skipList.search('D').should.equal('D')
         })
 
-        it('Should be possible to search for a value within the Skip List ( extended ).', () => {
+        it('Should be possible to search for a value within the Skip List, extended version.', () => {
             const skipList = new SkipList(), searchArr = []
 
             for (let idxNr = 0, maxNr = Math.pow(2, 16); idxNr < maxNr; idxNr++) {
@@ -48,5 +48,27 @@ describe('SkipList', () => {
                 skipList.search(aValue).should.equal(aValue)
             })
         })
+    })
+
+    context('#.toArray', () => {
+        it('Should be possible to convert the Skip List into an array.', () => {
+            const skipList = new SkipList()
+
+            skipList.insert('A')
+            skipList.insert('D')
+            skipList.insert('B')
+            skipList.insert('C')
+
+            const toArray = skipList.toArray()
+
+            toArray[0].should.equal('A')
+            toArray[1].should.equal('B')
+            toArray[2].should.equal('C')
+            toArray[3].should.equal('D')
+        })
+    })
+
+    context('#.from', () => {
+        it('Should be possible to create a Skip List from an Iterable.')
     })
 })

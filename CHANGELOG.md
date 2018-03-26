@@ -1,5 +1,7 @@
 2018-03-26 airliti
 
+    * Renamed the Single Linked List to Singly Linked List
+
     * Basic implementation of a Skip List
 
 2018-03-25 airliti

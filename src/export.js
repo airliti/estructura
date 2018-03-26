@@ -35,9 +35,9 @@ moduleMapping.LruCache = require('./lib/LruCache')
 moduleMapping.Queue = require('./lib/Queue')
 
 /**
- * @type {SingleLinkedList}
+ * @type {SinglyLinkedList}
  */
-moduleMapping.SingleLinkedList = require('./lib/SingleLinkedList')
+moduleMapping.SinglyLinkedList = require('./lib/SinglyLinkedList')
 
 /**
  * @type {StableHeap}

@@ -3,17 +3,17 @@ class NilSaVj9xHc {
 }
 
 /**
- * @class {SingleLinkedList}
+ * @class {SinglyLinkedList}
  */
-class SingleLinkedList {
+class SinglyLinkedList {
     /**
      * @constructor
      *
      * @example
      *
-     * const SingleLinkedList = require('structural/single-linked-list')
+     * const SinglyLinkedList = require('structural/single-linked-list')
      *
-     * const singleLinkedList = new SingleLinkedList()
+     * const singlyLinkedList = new SinglyLinkedList()
      */
     constructor() {
         this.pHead_ = {
@@ -38,9 +38,9 @@ class SingleLinkedList {
      *
      * @example
      *
-     * const singleLinkedList = new SingleLinkedList()
+     * const singlyLinkedList = new SinglyLinkedList()
      *
-     * singleLinkedList.unshift('Jane Doe')
+     * singlyLinkedList.unshift('Jane Doe')
      * >>> 1
      */
     unshift(aValue) {
@@ -62,11 +62,11 @@ class SingleLinkedList {
      *
      * @example
      *
-     * const singleLinkedList = new SingleLinkedList()
-     * singleLinkedList.unshift('Jane Doe')
-     * singleLinkedList.unshift('John Doe')
+     * const singlyLinkedList = new SinglyLinkedList()
+     * singlyLinkedList.unshift('Jane Doe')
+     * singlyLinkedList.unshift('John Doe')
      *
-     * singleLinkedList.shift()
+     * singlyLinkedList.shift()
      * >>> John Doe
      */
     shift() {
@@ -91,11 +91,11 @@ class SingleLinkedList {
      *
      * @example
      *
-     * const singleLinkedList = new SingleLinkedList()
-     * singleLinkedList.unshift('John Doe')
-     * singleLinkedList.unshift('Jane Doe')
+     * const singlyLinkedList = new SinglyLinkedList()
+     * singlyLinkedList.unshift('John Doe')
+     * singlyLinkedList.unshift('Jane Doe')
      *
-     * singleLinkedList.peek()
+     * singlyLinkedList.peek()
      * >>> Jane Doe
      *
      * @alias peekFront
@@ -113,11 +113,11 @@ class SingleLinkedList {
      *
      * @example
      *
-     * const singleLinkedList = new SingleLinkedList()
-     * singleLinkedList.unshift('John Doe')
-     * singleLinkedList.unshift('Jane Doe')
+     * const singlyLinkedList = new SinglyLinkedList()
+     * singlyLinkedList.unshift('John Doe')
+     * singlyLinkedList.unshift('Jane Doe')
      *
-     * singleLinkedList.toArray()
+     * singlyLinkedList.toArray()
      * >>> [ "Jane Doe", "John Doe" ]
      */
     toArray() {
@@ -133,6 +133,40 @@ class SingleLinkedList {
 
         return inArray
     }
+
+    /**
+     * Create a Single Linked List from an Iterable.
+     *
+     * @param {Iterable} iterateOver
+     *
+     * @return {SinglyLinkedList}
+     *
+     * @example
+     *
+     * const singlyLinkedList = SinglyLinkedList.from(['John Doe', 'Jane Doe'])
+     */
+    static from(iterateOver) {
+        const singlyLinkedList = new SinglyLinkedList()
+
+        let lNode = singlyLinkedList.pHead_
+
+        for (const aValue of iterateOver) {
+            const aNode = {
+                aValue: aValue,
+
+                rNode: null
+            }
+
+            lNode.rNode = aNode
+            lNode = aNode
+
+            singlyLinkedList.size++
+        }
+
+        if (singlyLinkedList.size > 0) singlyLinkedList.pHead_ = singlyLinkedList.pHead_.rNode
+
+        return singlyLinkedList
+    }
 }
 
-module.exports = SingleLinkedList
+module.exports = SinglyLinkedList
