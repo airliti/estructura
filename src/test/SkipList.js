@@ -58,12 +58,27 @@ describe('SkipList', () => {
         it('Should be possible to take a look at the first value within the Skip List.', () => {
             const skipList = new SkipList()
 
-            skipList.insert('B')
             skipList.insert('A')
 
             skipList.peek().should.equal('A')
 
-            skipList.size.should.equal(2)
+            skipList.size.should.equal(1)
+        })
+
+        it('Should be possible to take a look at the first value within the Skip List, extended version.', () => {
+            const skipList = new SkipList(
+                (itemA, itemB) => itemB > itemA
+            )
+
+            for (let idxNr = 0; idxNr < 32768; idxNr++) skipList.insert(
+                Math.random()
+            )
+
+            skipList.insert(1)
+
+            skipList.peek().should.equal(1)
+
+            skipList.size.should.equal(32768 + 1 /** Inserted at the end. **/)
         })
 
         it('Should return "undefined" when the Skip List is empty.', () => {
