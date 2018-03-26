@@ -1,8 +1,3 @@
-/**
- * ! Note: for performance, just include the required Object instead of using
- *     the "export.js" file.
- */
-
 const moduleMapping = {}
 
 /**
@@ -51,5 +46,10 @@ moduleMapping.StableHeap = require('./lib/StableHeap')
 
 moduleMapping.StableMinHeap = moduleMapping.StableHeap.MinHeap
 moduleMapping.StableMaxHeap = moduleMapping.StableHeap.MaxHeap
+
+/**
+ * @type {SkipList}
+ */
+moduleMapping.SkipList = require('./lib/SkipList')
 
 module.exports = moduleMapping

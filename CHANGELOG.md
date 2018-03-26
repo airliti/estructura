@@ -1,3 +1,7 @@
+2018-03-26 airliti
+
+    * Basic implementation of a Skip List
+
 2018-03-25 airliti
 
     * Convention
