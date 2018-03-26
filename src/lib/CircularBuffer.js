@@ -14,37 +14,13 @@ class CircularBuffer {
     constructor(maxSize) {
         if (isNaN(maxSize) === true) throw new Error(`${maxSize} is NaN.`)
 
-        /**
-         * @private
-         *
-         * @type {Array.<*>} _sCollection
-         */
-        this._sCollection = []
+        this.circularBuffer_ = []
 
-        /**
-         * @private
-         *
-         * @type {Number}
-         */
-        this._headOffset = 0
+        this.headOffset_ = 0
 
-        /**
-         * @type {Number}
-         */
         this.size = 0
-
-        /**
-         * The maximum length of our internal Array.
-         *
-         * @type {Number}
-         */
         this.maxSize = maxSize
 
-        /**
-         * @see #.peek
-         *
-         * @type {Function}
-         */
         this.peekFront = this.peek
     }
 
@@ -66,31 +42,13 @@ class CircularBuffer {
      */
     push(aValue) {
         if (this.size === this.maxSize) {
-            /**
-             * Replace the oldest item within the Buffer with a new
-             * value.
-             *
-             * @type {*}
-             */
-            this._sCollection[this._headOffset] = aValue
+            this.circularBuffer_[this.headOffset_] = aValue
 
-            /**
-             * Increase the `_headOffset` to account for the replacement
-             * of the oldest value.
-             *
-             * @type {Number}
-             */
-            this._headOffset = (this._headOffset + 1) % this.maxSize
+            this.headOffset_ = (this.headOffset_ + 1) % this.maxSize
         }
         else {
-            /**
-             * @type {*}
-             */
-            this._sCollection[(this._headOffset + this.size) % this.maxSize] = aValue
+            this.circularBuffer_[(this.headOffset_ + this.size) % this.maxSize] = aValue
 
-            /**
-             * @type {Number}
-             */
             this.size++
         }
 
@@ -115,22 +73,11 @@ class CircularBuffer {
     pop() {
         if (this.size === 0) return undefined
 
-        /**
-         * @type {Number}
-         */
         this.size--
 
-        /**
-         * @type {Number}
-         */
-        const idxNr = (this._headOffset + this.size) % this.maxSize
+        const idxNr = (this.headOffset_ + this.size) % this.maxSize, aValue = this.circularBuffer_[idxNr]
 
-        /**
-         * @type {*}
-         */
-        const aValue = this._sCollection[idxNr]
-
-        this._sCollection[idxNr] = null
+        this.circularBuffer_[idxNr] = null
 
         return aValue
     }
@@ -153,24 +100,12 @@ class CircularBuffer {
     shift() {
         if (this.size === 0) return undefined
 
-        /**
-         * @type {*}
-         */
-        const aValue = this._sCollection[this._headOffset]
+        const aValue = this.circularBuffer_[this.headOffset_]
 
-        this._sCollection[this._headOffset] = null
+        this.circularBuffer_[this.headOffset_] = null
 
-        /**
-         * We've shifted the first item within the Buffer. Move the `#._headOffset`
-         * to the next item.
-         *
-         * @type {Number}
-         */
-        this._headOffset = (this._headOffset + 1) % this.maxSize
+        this.headOffset_ = (this.headOffset_ + 1) % this.maxSize
 
-        /**
-         * @type {Number}
-         */
         this.size--
 
         return aValue
@@ -197,7 +132,7 @@ class CircularBuffer {
     peek() {
         if (this.size === 0) return undefined
 
-        return this._sCollection[this._headOffset]
+        return this.circularBuffer_[this.headOffset_]
     }
 
     /**
@@ -233,7 +168,7 @@ class CircularBuffer {
     peekBack() {
         if (this.size === 0) return undefined
 
-        return this._sCollection[(this._headOffset + this.size - 1) % this.maxSize]
+        return this.circularBuffer_[(this.headOffset_ + this.size - 1) % this.maxSize]
     }
 
     /**
@@ -249,23 +184,17 @@ class CircularBuffer {
      * >>> [ "Hello Jane Doe!", "Hello John Doe!" ]
      */
     toArray() {
-        /**
-         * @type {Number}
-         */
-        const sliceEnd = this._headOffset + this.size
+        const ePos = this.headOffset_ + this.size
 
-        /**
-         * @type {Array.<*>}
-         */
-        const toArray = this._sCollection.slice(
-            this._headOffset, Math.min(sliceEnd, this.maxSize)
+        const toArray = this.circularBuffer_.slice(
+            this.headOffset_, Math.min(ePos, this.maxSize)
         )
 
-        if (sliceEnd < this.maxSize) return toArray
+        if (ePos < this.maxSize) return toArray
 
         return toArray.concat(
-            this._sCollection.slice(
-                0, Math.max(0, sliceEnd % this.maxSize)
+            this.circularBuffer_.slice(
+                0, Math.max(0, ePos % this.maxSize)
             )
         )
     }
@@ -286,11 +215,6 @@ class CircularBuffer {
 
         for (const aValue of iterateOver) circularBuffer.push(aValue)
 
-        /**
-         * Replace `Infinity` with an actual value.
-         *
-         * @type {Number}
-         */
         circularBuffer.maxSize = circularBuffer.size
 
         return circularBuffer
