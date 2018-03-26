@@ -34,7 +34,7 @@ describe('SkipList', () => {
         it('Should be possible to search for a value within the Skip List, extended version.', () => {
             const skipList = new SkipList(), searchArr = []
 
-            for (let idxNr = 0, maxNr = Math.pow(2, 16); idxNr < maxNr; idxNr++) {
+            for (let idxNr = 0, maxNr = 32768; idxNr < maxNr; idxNr++) {
                 const randomNr = Math.random()
 
                 skipList.insert(randomNr)
@@ -52,6 +52,33 @@ describe('SkipList', () => {
 
     context('#.delete', () => {
         it('Should be possible to delete a value from the Skip List.')
+    })
+
+    context('#.peek', () => {
+        it('Should be possible to take a look at the first value within the Skip List.', () => {
+            const skipList = new SkipList()
+
+            skipList.insert('B')
+            skipList.insert('A')
+
+            skipList.peek().should.equal('A')
+
+            skipList.size.should.equal(2)
+        })
+
+        it('Should return "undefined" when the Skip List is empty.', () => {
+            const skipList = new SkipList()
+
+            should.not.exist(skipList.peek())
+        })
+    })
+
+    context('#.peekFront', () => {
+        it('Should be an alias of #.peek.', () => {
+            const skipList = new SkipList()
+
+            skipList.peekFront.should.equal(skipList.peek)
+        })
     })
 
     context('#.toArray', () => {

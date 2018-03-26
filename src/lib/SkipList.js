@@ -40,6 +40,8 @@ class SkipList {
         this.promotingProbability_ = promotingProbability
 
         this.size = 0
+
+        this.peekFront = this.peek
     }
 
     /**
@@ -238,6 +240,30 @@ class SkipList {
     }
 
     /**
+     * Take a look at the first value within the Skip List.
+     *
+     * `O(1)`
+     *
+     * @return {*}
+     *
+     * @example
+     *
+     * const skipList = new SkipList()
+     * skipList.insert('D')
+     * skipList.insert('A')
+     * skipList.insert('C')
+     * skipList.insert('B')
+     *
+     * skipList.peek()
+     * >>> A
+     */
+    peek() {
+        const fstNode = (this.pHead_.dwnArr.length > 0 ? this.pHead_.dwnArr[0] : this.pHead_).rNode
+
+        return fstNode ? fstNode.aValue : undefined
+    }
+
+    /**
      * Convert the Skip List to an array.
      *
      * `O(n)`
@@ -280,7 +306,6 @@ class SkipList {
      * @example
      *
      * const skipList = SkipList.from(['A', 'C', 'D', 'B'])
-     * >> SkipList
      */
     static from(iterateOver, compareFn = Comparator.compareFnAscending) {
         const skipList = new SkipList(compareFn)
