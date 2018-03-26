@@ -11,7 +11,7 @@ class SinglyLinkedList {
      *
      * @example
      *
-     * const SinglyLinkedList = require('structural/single-linked-list')
+     * const SinglyLinkedList = require('estructura/single-linked-list')
      *
      * const singlyLinkedList = new SinglyLinkedList()
      */

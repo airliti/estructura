@@ -381,5 +381,4 @@ class SkipList {
     }*/
 }
 
-module
-    .exports = SkipList
+module.exports = SkipList

@@ -13,7 +13,7 @@ class DoublyLinkedList {
      *
      * @example
      *
-     * const DoublyLinkedList = require('structural/doubly-linked-list')
+     * const DoublyLinkedList = require('estructura/doubly-linked-list')
      *
      * const doublyLinkedList = new DoublyLinkedList()
      */
