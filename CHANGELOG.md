@@ -1,3 +1,9 @@
+2018-03-27 airliti
+
+    * #.push, #.pop and #.shift Circular Buffer testing
+
+    * Enhanced performance for the Heap
+
 2018-03-26 0.1.7 airliti
 
     * Released version 0.1.7 on Npm

@@ -98,7 +98,30 @@ describe('Circular Buffer', () => {
         })
     })
 
-    it('Should be able to manage #.pop, #.shift and #.push when used mixed.')
+    it('Should be able to manage #.pop, #.shift and #.push when used mixed.', () => {
+        const circularBuffer = new CircularBuffer(20)
+
+        for (let idxNr = 1, maxNr = circularBuffer.maxSize + 1; idxNr < maxNr; idxNr++) circularBuffer.push(idxNr)
+
+        circularBuffer.shift().should.equal(1)
+        circularBuffer.shift().should.equal(2)
+
+        circularBuffer.pop().should.equal(20)
+        circularBuffer.pop().should.equal(19)
+
+        circularBuffer.push(19)
+        circularBuffer.push(20)
+        circularBuffer.push(21)
+        circularBuffer.push(22)
+
+        circularBuffer.shift().should.equal(3)
+        circularBuffer.shift().should.equal(4)
+
+        circularBuffer.pop().should.equal(22)
+        circularBuffer.pop().should.equal(21)
+
+        for (let maxNr = 20, minNr = 4; maxNr > minNr; maxNr--) circularBuffer.pop().should.equal(maxNr)
+    })
 
     context('#.peek', () => {
         it('Should return the item in front of the Circular Buffer.', () => {
