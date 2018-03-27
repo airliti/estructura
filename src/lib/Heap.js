@@ -36,39 +36,9 @@ class Heap {
         this.compareFn_ = compareFn
         this.heapData_ = []
 
-        /**
-         * @type {Number}
-         */
         this.size = 0
 
-        /**
-         * @see #.peek
-         *
-         * @type {Function}
-         */
         this.peekFront = this.peek
-    }
-
-    /**
-     * @private
-     *
-     * @param {Function} compareFn
-     * @param {Array.<*>} heapData
-     * @param {*} bubbleUp
-     * @param {Number} idxNr
-     */
-    bubbleUp_(compareFn, heapData, bubbleUp, idxNr) {
-        let parentIdxNr
-
-        /**
-         *
-         */
-        while ((parentIdxNr = ((idxNr - 1) >> 1)) >= 0 && compareFn(heapData[parentIdxNr], bubbleUp) > 0) {
-            heapData[idxNr] = heapData[parentIdxNr]
-            heapData[parentIdxNr] = bubbleUp
-
-            idxNr = parentIdxNr
-        }
     }
 
     /**
@@ -88,41 +58,20 @@ class Heap {
      * >>> 1
      */
     push(aValue) {
-        const heapData = this.heapData_
+        const heapData = this.heapData_, compareFn = this.compareFn_
         heapData.push(aValue)
 
-        this.bubbleUp_(this.compareFn_, heapData, aValue, this.size)
+        // #.bubbleUp
+        let idxNr = this.size, parentIdxNr
+
+        while ((parentIdxNr = ((idxNr - 1) >> 1)) >= 0 && compareFn(heapData[parentIdxNr], aValue) > 0) {
+            heapData[idxNr] = heapData[parentIdxNr]
+            heapData[parentIdxNr] = aValue
+
+            idxNr = parentIdxNr
+        }
 
         return ++this.size
-    }
-
-    /**
-     * @private
-     *
-     * @param {Function} compareFn
-     * @param {Array.<*>} heapData
-     * @param {*} sinkDownEntry
-     * @param {Number} idxNr
-     */
-    sinkDown_(compareFn, heapData, sinkDownEntry, idxNr) {
-        let fChildIdxNr, sChildIdxNr
-
-        while (true) {
-            fChildIdxNr = (idxNr << 1) + 1, sChildIdxNr = fChildIdxNr + 1
-
-            if (fChildIdxNr >= heapData.length) break
-
-            if (sChildIdxNr < heapData.length && compareFn(heapData[fChildIdxNr], heapData[sChildIdxNr]) > 0) {
-                fChildIdxNr = sChildIdxNr
-            }
-
-            if (compareFn(heapData[fChildIdxNr], sinkDownEntry) <= 0) {
-                heapData[idxNr] = heapData[fChildIdxNr]
-                heapData[fChildIdxNr] = sinkDownEntry
-            }
-
-            idxNr = fChildIdxNr
-        }
     }
 
     /**
@@ -170,17 +119,33 @@ class Heap {
      * >>> 2
      */
     pop() {
-        if (this.size === 0) return undefined
+        if (this.size < 1) return undefined
 
         const heapData = this.heapData_
+        const heapSize = --this.size
 
-        if (--this.size < 1) return heapData.pop()
+        const retValue = heapData[0]
+        const dwnValue = heapData[0] = heapData.pop()
 
-        const rEntry = heapData[0], sinkDownEntry = heapData[0] = heapData.pop()
+        const compareFn = this.compareFn_
 
-        this.sinkDown_(this.compareFn_, heapData, sinkDownEntry, 0)
+        // #.sinkDown
+        let idxNr = 0, fChildIdxNr = (idxNr << 1) + 1, sChildIdxNr = fChildIdxNr + 1
 
-        return rEntry
+        while (fChildIdxNr < heapSize) {
+            if (sChildIdxNr < heapSize && compareFn(heapData[fChildIdxNr], heapData[sChildIdxNr]) > 0) {
+                fChildIdxNr = sChildIdxNr
+            }
+
+            if (compareFn(heapData[fChildIdxNr], dwnValue) <= 0) {
+                heapData[idxNr] = heapData[fChildIdxNr]
+                heapData[fChildIdxNr] = dwnValue
+            }
+
+            idxNr = fChildIdxNr, fChildIdxNr = (idxNr << 1) + 1, sChildIdxNr = fChildIdxNr + 1
+        }
+
+        return retValue
     }
 
     /**

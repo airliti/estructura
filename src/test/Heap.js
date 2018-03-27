@@ -17,9 +17,12 @@ describe('Heap', () => {
     /**
      * @param {Heap} aHeap
      * @param {Array.<*>} verifyAgainst
+     * @param {Number | undefined} heapSize
      */
-    const verifyPop = (aHeap, verifyAgainst) => {
-        aHeap.size.should.equal(verifyAgainst.length)
+    const verifyPop = (aHeap, verifyAgainst, heapSize = undefined) => {
+        if (!heapSize) heapSize = verifyAgainst.length
+
+        aHeap.size.should.equal(heapSize)
 
         for (let idxNr = 0, maxNr = verifyAgainst.length; idxNr < maxNr; idxNr++) {
             aHeap.pop().should.equal(verifyAgainst[idxNr])
@@ -99,16 +102,35 @@ describe('Heap', () => {
     })
 
     context('#.from', () => {
-        it('Should be possible to create an Heap from an Iterable as an Set.', () => {
+        it('Should be possible to create a Heap from an Iterable as an Set.', () => {
             const aHeap = Heap.MinHeap.from(new Set(['D', 'B', 'A', 'C']))
 
             verifyPop(aHeap, ['A', 'B', 'C', 'D'])
         })
 
-        it('Should be possible to create an Heap from an Iterable such as an Array.', () => {
+        it('Should be possible to create a Heap from an Iterable such as an Array.', () => {
             const aHeap = Heap.MaxHeap.from(['A', 'C', 'D', 'B'])
 
             verifyPop(aHeap, ['D', 'C', 'B', 'A'])
+        })
+    })
+
+    context('#.fromHeap', () => {
+        it('Should be possible to create a Heap from another Heap.', () => {
+            const aHeap = new Heap()
+
+            aHeap.push(8)
+            aHeap.push(4)
+            aHeap.push(6)
+            aHeap.push(2)
+
+            verifyPop(aHeap, [2, 4], 4)
+
+            const aHeapFromAnotherHeap = Heap.fromHeap(aHeap)
+
+            aHeapFromAnotherHeap.size.should.equal(2)
+
+            verifyPop(aHeapFromAnotherHeap, [6, 8])
         })
     })
 
