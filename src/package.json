@@ -1,6 +1,6 @@
 {
   "name": "estructura",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "license": "MIT",
   "description": "JavaScript Data Structures written for Node.js",
   "keywords": [
@@ -18,7 +18,7 @@
     "test": "mocha --recursive test",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -dir ./istanbul -- --recursive test"
   },
-  "author": "Airliti",
+  "author": "airliti",
   "devDependencies": {
     "chai": "^3.5.0",
     "istanbul": "^0.4.5",
