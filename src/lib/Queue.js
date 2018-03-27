@@ -87,7 +87,7 @@ class Queue {
 
         this.aQueue_[this.headOffset_] = null
 
-        if (++this.headOffset_ * 2 >= this.aQueue_.length) {
+        if (++this.headOffset_ << 1 >= this.aQueue_.length) {
             this.aQueue_ = this.aQueue_.slice(this.headOffset_)
 
             this.headOffset_ = 0
