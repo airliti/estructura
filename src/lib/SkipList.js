@@ -153,6 +153,28 @@ class SkipList {
      *
      * Average O(log n), Worst Case O(n)
      *
+     * p = this.promotingProbability_
+     *
+     * 1 + [ ( log 1 / p ( this.size ) ) / p ] + 1 / ( 1 - p )
+     *
+     * p = .5
+     * this.size = 65 536
+     *
+     * 1 + [ log2( 65 536 ) / p   ] + 1 / ( 1 - p  )
+     * 1 + [ log2( 65 536 ) / 0.5 ] + 1 / ( 1 - .5 )
+     *
+     * = 35
+     *
+     * p = .25
+     * this.size = 65 536
+     *
+     * 1 + [ log4( 65536 ) / 0.25 ] + 1 / ( 1 - 0.25 )
+     *
+     * = 103 / 3
+     * = 34.3333
+     *
+     * @see https://www.csee.umbc.edu/courses/undergraduate/341/fall01/Lectures/SkipLists/skip_lists/skip_lists.html
+     *
      * @param {*} aValue
      *
      * @example
