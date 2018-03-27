@@ -12,32 +12,10 @@ class Queue {
      * const aQueue = new Queue()
      */
     constructor() {
-        /**
-         * @private
-         *
-         * @type {Array.<*>}
-         */
-        this._itemCollection = []
+        this.aQueue_ = [], this.headOffset_ = 0
 
-        /**
-         * @private
-         *
-         * @type {Number}
-         */
-        this._itemOffset = 0
-
-        /**
-         * The total size of the `#._itemCollection` for the current Queue.
-         *
-         * @type {Number}
-         */
         this.size = 0
 
-        /**
-         * @see #.peek
-         *
-         * @type {Function}
-         */
         this.peekFront = this.peek
     }
 
@@ -58,7 +36,7 @@ class Queue {
      * >>> 1
      */
     enqueue(enqueueItem) {
-        this._itemCollection.push(enqueueItem)
+        this.aQueue_.push(enqueueItem)
 
         return ++this.size
     }
@@ -82,7 +60,7 @@ class Queue {
      * @alias peekFront
      */
     peek() {
-        return this._itemCollection[this._itemOffset]
+        return this.aQueue_[this.headOffset_]
     }
 
     /**
@@ -105,31 +83,19 @@ class Queue {
     dequeue() {
         if (this.size === 0) return undefined
 
-        //
-        // @type {*}
-        //
-        const dequeueItem = this._itemCollection[this._itemOffset]
+        const aValue = this.aQueue_[this.headOffset_]
 
-        this._itemCollection[this._itemOffset] = null
+        this.aQueue_[this.headOffset_] = null
 
-        //
-        // @type {Number}
-        //
-        this._itemOffset++
+        if (++this.headOffset_ * 2 >= this.aQueue_.length) {
+            this.aQueue_ = this.aQueue_.slice(this.headOffset_)
 
-        //
-        // Resize a Queue when the #.dequeue method is frequently used. Otherwise
-        // we'll end up with an enormous #._itemCollection full of "null";
-        //
-        if (this._itemOffset * 2 >= this._itemCollection.length) {
-            this._itemCollection = this._itemCollection.slice(this._itemOffset)
-
-            this._itemOffset = 0
+            this.headOffset_ = 0
         }
 
         this.size--
 
-        return dequeueItem
+        return aValue
     }
 
     /**
@@ -147,7 +113,7 @@ class Queue {
      * >>> [ "John Doe", "Jane Doe" ]
      */
     toArray() {
-        return this._itemCollection.slice(this._itemOffset)
+        return this.aQueue_.slice(this.headOffset_)
     }
 
     /**

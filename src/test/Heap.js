@@ -92,12 +92,12 @@ describe('Heap', () => {
 
     context('#.toArray', () => {
         it('Should be possible to turn a Heap into an Array.', () => {
-            const itemCollection = Heap.MinHeap.from(['A', 'C', 'D', 'B']).toArray()
+            const toArray = Heap.MinHeap.from(['A', 'C', 'D', 'B']).toArray()
 
-            itemCollection.shift().should.equal('A')
-            itemCollection.shift().should.equal('B')
-            itemCollection.shift().should.equal('C')
-            itemCollection.shift().should.equal('D')
+            toArray.shift().should.equal('A')
+            toArray.shift().should.equal('B')
+            toArray.shift().should.equal('C')
+            toArray.shift().should.equal('D')
         })
     })
 

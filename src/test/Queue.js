@@ -79,7 +79,7 @@ describe('Queue', () => {
             aQueue.dequeue().should.equal('D')
         })
 
-        it('#.toArray should keep the #._itemOffset in mind.', () => {
+        it('#.toArray should keep the #.headOffset_ in mind.', () => {
             const aQueue = Queue.from(['A', 'B', 'C', 'D', 'E'])
 
             aQueue.dequeue()
@@ -87,7 +87,7 @@ describe('Queue', () => {
 
             /**
              * Check if the Array returned by .toArray() doesn't return "null" at
-             * the beginning due to ._itemOffset;
+             * the beginning due to .headOffset_;
              *
              * @type {Array.<*>}
              */
@@ -119,7 +119,7 @@ describe('Queue', () => {
             aQueue.dequeue()
             aQueue.dequeue()
 
-            aQueue._itemCollection.length.should.equal(2)
+            aQueue.aQueue_.length.should.equal(2)
         })
     })
 })
