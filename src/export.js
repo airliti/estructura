@@ -30,6 +30,11 @@ moduleMapping.MaxHeap = moduleMapping.Heap.MaxHeap
 moduleMapping.LruCache = require('./lib/LruCache')
 
 /**
+ * @type {PriorityQueue}
+ */
+moduleMapping.PriorityQueue = require('./lib/PriorityQueue')
+
+/**
  * @type {Queue}
  */
 moduleMapping.Queue = require('./lib/Queue')

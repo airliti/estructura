@@ -1,5 +1,7 @@
 2018-03-27 airliti
 
+    * Implementation of a Priority Queue based on a Heap
+
     * #.push, #.pop and #.shift Circular Buffer testing
 
     * Enhanced performance for the Heap

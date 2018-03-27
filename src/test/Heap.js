@@ -47,10 +47,6 @@ describe('Heap', () => {
 
             for (let idxNr = 0; idxNr < 18620; idxNr++) aHeap.push(Math.floor(Math.random() * 18620))
 
-            /**
-             * Go through each item in the Heap. Check whether the value is lower than
-             * or equal to the previous item.
-             */
             let prevValue = aHeap.pop(), curValue
 
             while ((curValue = aHeap.pop()) !== undefined) {

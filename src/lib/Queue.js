@@ -24,7 +24,7 @@ class Queue {
      *
      * `O(1)`
      *
-     * @param {*} enqueueItem
+     * @param {*} aValue
      *
      * @return {Number} The new size of the Queue.
      *
@@ -35,8 +35,8 @@ class Queue {
      * aQueue.enqueue('John Doe')
      * >>> 1
      */
-    enqueue(enqueueItem) {
-        this.aQueue_.push(enqueueItem)
+    enqueue(aValue) {
+        this.aQueue_.push(aValue)
 
         return ++this.size
     }
