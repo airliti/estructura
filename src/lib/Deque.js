@@ -97,9 +97,7 @@ class Deque {
 
             this.shftCollection_[this.shftOffset_] = null
 
-            this.shftOffset_++
-
-            if (this.shftOffset_ << 1 >= this.shftCollection_.length) {
+            if (++this.shftOffset_ << 1 >= this.shftCollection_.length) {
                 this.shftCollection_.splice(0, this.shftOffset_)
 
                 this.shftOffset_ = 0
@@ -143,9 +141,7 @@ class Deque {
 
             this.pushCollection_[this.pushOffset_] = null
 
-            this.pushOffset_++
-
-            if (this.pushOffset_ << 1 >= this.pushCollection_.length) {
+            if (++this.pushOffset_ << 1 >= this.pushCollection_.length) {
                 this.pushCollection_.splice(0, this.pushOffset_)
 
                 this.pushOffset_ = 0
