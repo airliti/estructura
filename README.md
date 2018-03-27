@@ -22,6 +22,8 @@ Note: the Double Linked List should NOT be used anymore. Use the Doubly Linked L
 
 * [Lru Cache](https://github.com/airliti/estructura/wiki/Lru-Cache)
 
+* [Priority Queue](https://github.com/airliti/estructura/wiki/Priority-Queue)
+
 * [Queue](https://github.com/airliti/estructura/wiki/Queue)
 
 * [Singly Linked List](https://github.com/airliti/estructura/wiki/Singly-Linked-List)
