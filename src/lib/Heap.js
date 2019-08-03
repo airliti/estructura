@@ -125,7 +125,11 @@ class Heap {
         const heapSize = --this.size
 
         const retValue = heapData[0]
-        const dwnValue = heapData[0] = heapData.pop()
+        const dwnValue = heapData.pop()
+
+        if (heapSize < 1) return retValue
+
+        heapData[0] = dwnValue
 
         const compareFn = this.compareFn_
 

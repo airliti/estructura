@@ -31,6 +31,31 @@ describe('StableHeap', () => {
         toArray[1].aValue.should.equal('C')
         toArray[2].aValue.should.equal('D')
         toArray[3].aValue.should.equal('B')
+
+        stableHeap.pop().aValue.should.equal('A')
+        stableHeap.pop().aValue.should.equal('C')
+        stableHeap.pop().aValue.should.equal('D')
+        stableHeap.pop().aValue.should.equal('B')
+
+        should.not.exist(stableHeap.pop() /* `undefined` */)
+    })
+
+    it.skip('Should renumber the Heap, if necessary.', () => {
+        const stableHeap = new StableHeap()
+
+        stableHeap.insertNr_ = 4
+
+        stableHeap.push('A')
+        stableHeap.push('B')
+        stableHeap.push('C')
+        stableHeap.push('D')
+
+        stableHeap.insertNr_.should.equal(0)
+
+        stableHeap.push('E')
+        stableHeap.push('F')
+
+        stableHeap.insertNr_.should.equal(/* Number.MIN_SAFE_INTEGER, but can't test that. That number is too large to wait on. */)
     })
 
     context('#.peekFront', () => {

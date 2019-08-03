@@ -1,9 +1,6 @@
 const Comparator = require('./util/Comparator')
 
 /**
- * Used to wrap any given Function to the Stable Heap in order to ensure a First
- * In First Out mechanism between each and every item that is equal.
- *
  * @param {Function} compareFn
  *
  * @return {Function}
@@ -81,7 +78,7 @@ class StableHeap extends Heap {
          *
          * @type {Number}
          */
-        this._insertNr = Number.MAX_SAFE_INTEGER
+        this.insertNr_ = Number.MAX_SAFE_INTEGER
 
         this.peekFront = this.peek
     }
@@ -89,12 +86,14 @@ class StableHeap extends Heap {
     /**
      * Insert a new item within the Stable Heap.
      *
-     * `O(log n)`
+     * `O(log n)`, when `this._insertNr < 1`, the Stable Heap will be renumbered
      *
      * @param {*} aValue
      */
     push(aValue) {
-        return super.push({aValue: aValue, insertNr: this._insertNr--})
+        if (this.insertNr_ === Number.MIN_SAFE_INTEGER) throw new Error('Not implemented, yet. Renumber the Stable Heap.')
+
+        return super.push({aValue: aValue, insertNr: this.insertNr_--})
     }
 
     /**
@@ -120,7 +119,9 @@ class StableHeap extends Heap {
      * @return {*}
      */
     pop() {
-        return super.pop().aValue
+        const poppedObject = super.pop()
+
+        return poppedObject ? poppedObject.aValue : undefined
     }
 
     /**
