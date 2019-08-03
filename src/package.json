@@ -1,6 +1,6 @@
 {
   "name": "estructura",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "license": "MIT",
   "description": "JavaScript Data Structures written for Node.js",
   "keywords": [
