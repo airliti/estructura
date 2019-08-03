@@ -169,4 +169,57 @@ describe('DoublyLinkedList', () => {
             doublyLinkedList.shift().should.equal('D')
         })
     })
+
+    context('#.push, #.unshift, #.pop, and #.shift', () => {
+        it('Should be possible to use #.push, #.unshift, #.pop, and #.shift together.', () => {
+            const isEqual = function (doublyLinkedList, compareAgainst) {
+                const checkMe = doublyLinkedList.toArray()
+
+                if (checkMe.length !== compareAgainst.length) return false
+
+                for (let idxNr = 0, maxNr = compareAgainst.length; idxNr < maxNr; idxNr++) if (checkMe[idxNr] !== compareAgainst[idxNr]) return false
+
+                return true
+            }
+
+            const doublyLinkedList = new DoublyLinkedList()
+
+            let compareItAgainst = []
+
+            for (let iNr = 0; iNr < 32768; iNr++) {
+                const rndNr = ['.push', '.unshift', '.pop', '.shift'][Math.floor(Math.random() * 4)]
+
+                switch (rndNr) {
+                    case '.push':
+                        doublyLinkedList.push(iNr)
+                        compareItAgainst.push(iNr)
+
+                        isEqual(doublyLinkedList, compareItAgainst).should.be.true
+
+                        break
+                    case '.unshift':
+                        doublyLinkedList.unshift(iNr)
+                        compareItAgainst = [iNr].concat(compareItAgainst)
+
+                        isEqual(doublyLinkedList, compareItAgainst).should.be.true
+
+                        break
+                    case '.pop':
+                        doublyLinkedList.pop()
+                        compareItAgainst.pop()
+
+                        isEqual(doublyLinkedList, compareItAgainst).should.be.true
+
+                        break
+                    case '.shift':
+                        doublyLinkedList.shift()
+                        compareItAgainst.splice(0, 1)
+
+                        isEqual(doublyLinkedList, compareItAgainst).should.be.true
+
+                        break
+                }
+            }
+        })
+    })
 })

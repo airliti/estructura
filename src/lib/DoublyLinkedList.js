@@ -1,6 +1,4 @@
-class NilPnQgTl5o {
-
-}
+class NilPnQgTl5o {}
 
 /**
  * Doubly Linked List.
@@ -121,11 +119,11 @@ class DoublyLinkedList {
      * >>> Jane Doe
      */
     pop() {
-        if (this.pTail_.lNode.aValue instanceof NilPnQgTl5o) return undefined
+        if (this.pTail_.lNode.aValue === this.pHead_.aValue) return undefined
 
         const aNode = this.pTail_.lNode
 
-        this.pTail_.lNode.rNode = this.pTail_
+        this.pTail_.lNode.lNode.rNode = this.pTail_
         this.pTail_.lNode = this.pTail_.lNode.lNode
 
         aNode.lNode = null
@@ -153,11 +151,11 @@ class DoublyLinkedList {
      * >>> John Doe
      */
     shift() {
-        if (this.pHead_.rNode.aValue instanceof NilPnQgTl5o) return undefined
+        if (this.pHead_.rNode.aValue === this.pTail_.aValue) return undefined
 
         const aNode = this.pHead_.rNode
 
-        this.pHead_.rNode.lNode = this.pHead_
+        this.pHead_.rNode.rNode.lNode = this.pHead_
         this.pHead_.rNode = this.pHead_.rNode.rNode
 
         aNode.lNode = null
@@ -187,7 +185,7 @@ class DoublyLinkedList {
      * @alias peekFront
      */
     peek() {
-        return !(this.pHead_.rNode.aValue instanceof NilPnQgTl5o) ? this.pHead_.rNode.aValue : undefined
+        return this.pHead_.rNode.aValue !== this.pTail_.aValue ? this.pHead_.rNode.aValue : undefined
     }
 
     /**
@@ -220,7 +218,7 @@ class DoublyLinkedList {
      * >>> John Doe
      */
     peekBack() {
-        return !(this.pTail_.lNode.aValue instanceof NilPnQgTl5o) ? this.pTail_.lNode.aValue : this.peekFront()
+        return this.pTail_.lNode.aValue !== this.pHead_.aValue ? this.pTail_.lNode.aValue : this.peekFront()
     }
 
     /**
@@ -242,7 +240,7 @@ class DoublyLinkedList {
 
         let aNode = this.pHead_.rNode
 
-        while (!(aNode.aValue instanceof NilPnQgTl5o)) {
+        while (aNode.aValue !== this.pTail_.aValue) {
             inArray.push(aNode.aValue)
 
             aNode = aNode.rNode
