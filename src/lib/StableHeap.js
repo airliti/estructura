@@ -15,9 +15,9 @@ const wrapComparator = (compareFn) => {
      * @return {Boolean}
      */
     return (itemA, itemB) => {
-        const comparisonOutput = compareFn(itemA.aValue, itemB.aValue)
+        const aVsB = compareFn(itemA.aValue, itemB.aValue)
 
-        return comparisonOutput !== 0 ? comparisonOutput : itemA.insertNr < itemB.insertNr ? +1 : -1
+        return aVsB !== 0 ? aVsB : (itemA.createdAt === itemB.createdAt ? (itemA.insertNr < itemB.insertNr ? +1 : -1) : (itemA.createdAt > itemB.createdAt ? +1 : -1))
     }
 }
 
@@ -78,6 +78,13 @@ class StableHeap extends Heap {
          *
          * @type {Number}
          */
+        this.earlierCreatedAt_ = Date.now()
+
+        /**
+         * @private
+         *
+         * @type {Number}
+         */
         this.insertNr_ = Number.MAX_SAFE_INTEGER
 
         this.peekFront = this.peek
@@ -91,9 +98,15 @@ class StableHeap extends Heap {
      * @param {*} aValue
      */
     push(aValue) {
-        if (this.insertNr_ === Number.MIN_SAFE_INTEGER) throw new Error('Not implemented, yet. Renumber the Stable Heap.')
+        const createdAt = Date.now()
 
-        return super.push({aValue: aValue, insertNr: this.insertNr_--})
+        if (createdAt > this.earlierCreatedAt_) {
+            this.earlierCreatedAt_ = createdAt
+
+            this.insertNr_ = Number.MAX_SAFE_INTEGER
+        }
+
+        return super.push({aValue: aValue, createdAt: createdAt, insertNr: this.insertNr_--})
     }
 
     /**

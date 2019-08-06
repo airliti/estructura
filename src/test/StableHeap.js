@@ -12,7 +12,7 @@ describe('StableHeap', () => {
             {aNr: 2, aValue: 'D'}
         ]
 
-        const useComparator = (itemA, itemB) => itemA.aNr === itemB.aNr ? 0 : itemA.aNr > itemB.aNr ? 1 : -1
+        const useComparator = (itemA, itemB) => itemA.aNr === itemB.aNr ? 0 : itemA.aNr > itemB.aNr ? +1 : -1
 
         const aHeap = Heap.from(aCollection, useComparator)
 
@@ -40,7 +40,29 @@ describe('StableHeap', () => {
         should.not.exist(stableHeap.pop() /* `undefined` */)
     })
 
-    it.skip('Should renumber the Heap, if necessary.', () => {
+    it('Should ensure a First In First Out mechanism, even after extensive use for a long(er) period of time.', (whenDone) => {
+        const stableHeap = new StableHeap((itemA, itemB) => {
+            return 0
+        })
+
+        let insertNr = 0
+
+        const testInterval = setInterval(() => {
+            for (let maxNr = insertNr + 32; insertNr < maxNr; insertNr++) stableHeap.push(insertNr)
+
+            if (insertNr >= 128) {
+                clearInterval(testInterval)
+
+                stableHeap.size.should.equal(insertNr)
+
+                for (let equalNr = 0; equalNr < insertNr; equalNr++) stableHeap.pop().should.equal(equalNr)
+
+                whenDone()
+            }
+        }, 1024)
+    }).timeout(6000)
+
+    it.skip('Should use both `createdAt` & `insertNr` to decide the position of an item within (the Stable Heap).', () => {
         const stableHeap = new StableHeap()
 
         stableHeap.insertNr_ = 4
@@ -56,7 +78,7 @@ describe('StableHeap', () => {
         stableHeap.push('F')
 
         stableHeap.insertNr_.should.equal(/* Number.MIN_SAFE_INTEGER, but can't test that. That number is too large to wait on. */)
-    })
+    }).timeout(6000)
 
     context('#.peekFront', () => {
         it('Should be an alias of #.peek.', () => {
