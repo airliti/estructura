@@ -78,7 +78,7 @@ describe('StableHeap', () => {
         stableHeap.push('F')
 
         stableHeap.insertNr_.should.equal(/* Number.MIN_SAFE_INTEGER, but can't test that. That number is too large to wait on. */)
-    }).timeout(6000)
+    })
 
     context('#.peekFront', () => {
         it('Should be an alias of #.peek.', () => {
