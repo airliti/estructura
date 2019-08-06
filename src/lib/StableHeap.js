@@ -78,7 +78,7 @@ class StableHeap extends Heap {
          *
          * @type {Number}
          */
-        this.earlierCreatedAt_ = Date.now()
+        this.prevCreatedAt_ = Date.now()
 
         /**
          * @private
@@ -93,15 +93,15 @@ class StableHeap extends Heap {
     /**
      * Insert a new item within the Stable Heap.
      *
-     * `O(log n)`, when `this._insertNr < 1`, the Stable Heap will be renumbered
+     * `O(log n)`
      *
      * @param {*} aValue
      */
     push(aValue) {
         const createdAt = Date.now()
 
-        if (createdAt > this.earlierCreatedAt_) {
-            this.earlierCreatedAt_ = createdAt
+        if (createdAt > this.prevCreatedAt_) {
+            this.prevCreatedAt_ = createdAt
 
             this.insertNr_ = Number.MAX_SAFE_INTEGER
         }
